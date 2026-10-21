@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FCCU Course Tracker | Spring 2027 Seat Availability</title>
+  <meta name="description" content="Real-time course seat tracker and seat-opening alert system for FCCU Spring 2027 course registration." />
+  <link rel="stylesheet" href="/static/styles.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎓</text></svg>" />
+</head>
+<body>
+
+  <!-- Top Navigation Header -->
+  <header class="glass-header">
+    <div class="container header-content">
+      <div class="logo-group">
+        <div class="logo-icon">F</div>
+        <div class="logo-text">
+          <h1>FCCU Course & Seat Tracker</h1>
+          <p>Spring 2027 Registration &bull; Undergraduate (100–400 Level &amp; MATH 095)</p>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <!-- Live Status Badge -->
+        <div class="pulse-badge" id="live-indicator" title="Connected to Empower SIS">
+          <span class="pulse-dot"></span>
+          <span>Empower Live</span>
+        </div>
+
+        <!-- Term Selector -->
+        <select id="term-select" class="input-select" title="Change Academic Term">
+          <option value="2027SP">Spring 2027</option>
+        </select>
+
+        <!-- Auto-sync info & Countdown -->
+        <div class="btn btn-secondary" style="cursor: default;" title="Auto-polling Empower SIS">
+          <span>⏱️</span>
+          <span id="sync-countdown">30s</span>
+        </div>
+
+        <!-- Manual Sync Now -->
+        <button id="sync-now-btn" class="btn btn-primary" onclick="refreshFromEmpower()" title="Poll Empower SIS catalog right now">
+          <span>🔄</span>
+          <span>Sync Now</span>
+        </button>
+
+        <!-- Audio Sound Toggle -->
+        <button id="sound-toggle-btn" class="btn btn-secondary" onclick="toggleSound()" title="Toggle audio chime for seat openings">
+          🔊 Sound On
+        </button>
+
+        <!-- Desktop Notifications Toggle -->
+        <button id="notify-toggle-btn" class="btn btn-secondary" onclick="requestDesktopNotification()" title="Enable desktop notifications when full courses get open seats">
+          🔔 Alerts
+        </button>
+
+        <!-- Simulation / Test Alert Buttons -->
+        <div style="display: flex; gap: 0.35rem;">
+          <button id="test-seat-btn" class="btn btn-amber" onclick="triggerTestAlert('seat_opened')" title="Simulate a seat opening up in a full course">
+            🧪 Test Seat Alert
+          </button>
+          <button id="test-section-btn" class="btn btn-secondary" style="border-color: rgba(34, 211, 238, 0.4); color: #67e8f9;" onclick="triggerTestAlert('new_section')" title="Simulate a new section opening up during registration or January add/drop">
+            🆕 Test New Section
+          </button>
+        </div>
+
+        <!-- Alerts Drawer / History -->
+        <button class="btn btn-secondary" onclick="openAlertsModal()" title="View history of seat opening alerts">
+          📋 Alerts
+          <span id="alerts-badge" style="display: none; background: #ef4444; color: #fff; font-size: 0.65rem; padding: 2px 6px; border-radius: 9999px; margin-left: 2px;">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="container">
+
+    <!-- Dynamic Seat Opened Banner (Appears when seat becomes free) -->
+    <div id="alert-banner-container"></div>
+
+    <!-- Registration & Add/Drop Timeline Notice -->
+    <div style="margin-top: 1rem; padding: 0.85rem 1.15rem; background: rgba(99, 102, 241, 0.08); border: 1px solid rgba(99, 102, 241, 0.2); border-radius: 12px; font-size: 0.825rem; display: flex; flex-direction: column; gap: 0.6rem;">
+      <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem;">
+        <div style="display: flex; align-items: center; gap: 0.5rem; color: #c7d2fe; font-weight: 600;">
+          <span>🎓</span>
+          <span>FCCU Registration &amp; Add/Drop Monitor (Undergraduate 100–400 &amp; MATH 095)</span>
+        </div>
+        <a href="https://mysis-fccollege.empower-xl.com/fusebox.cfm?fuseaction=CourseCatalog&rpt=1" target="_blank" rel="noopener noreferrer" style="color: #38bdf8; text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 0.25rem;">
+          Empower SIS Catalog &rarr;
+        </a>
+      </div>
+      <div style="display: flex; gap: 0.6rem; flex-wrap: wrap; font-size: 0.775rem;">
+        <span style="background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.3); color: #34d399; padding: 0.25rem 0.6rem; border-radius: 6px; font-weight: 600;">
+          ● Phase 1: Pre-Registration (Active Scraper)
+        </span>
+        <span style="background: rgba(99, 102, 241, 0.15); border: 1px solid rgba(99, 102, 241, 0.3); color: #a5b4fc; padding: 0.25rem 0.6rem; border-radius: 6px; font-weight: 600;">
+          📅 Phase 2: Registration Opens 23rd Nov
+        </span>
+        <span style="background: rgba(245, 158, 11, 0.15); border: 1px solid rgba(245, 158, 11, 0.3); color: #fde68a; padding: 0.25rem 0.6rem; border-radius: 6px; font-weight: 600;">
+          🔄 Phase 3: Add/Drop Period (January 2027)
+        </span>
+      </div>
+      <div style="color: var(--text-dim); font-size: 0.75rem;">
+        The system continuously scans Empower. If departments add brand new sections or remove/cancel sections before or during registration / add-drop, the catalog updates automatically and alerts you instantly!
+      </div>
+    </div>
+
+    <!-- Stats Dashboard Row -->
+    <div class="stats-grid">
+      <div class="stat-card glass">
+        <span class="stat-label">Total Courses</span>
+        <div class="stat-value" id="stat-total-courses" style="color: #38bdf8;">0</div>
+        <div class="stat-sub" id="stat-total-sections">0 sections</div>
+      </div>
+
+      <div class="stat-card glass">
+        <span class="stat-label">Available Seats</span>
+        <div class="stat-value" id="stat-avail-seats" style="color: #34d399;">0</div>
+        <div class="stat-sub" id="stat-enrolled">0 enrolled</div>
+      </div>
+
+      <div class="stat-card glass">
+        <span class="stat-label">Full Courses (0 Seats)</span>
+        <div class="stat-value" id="stat-full-count" style="color: #f87171;">0</div>
+        <div class="stat-sub" id="stat-low-count">0 low seats</div>
+      </div>
+
+      <div class="stat-card glass">
+        <span class="stat-label">New Sections Added</span>
+        <div class="stat-value" id="stat-new-sections" style="color: #22d3ee;">0</div>
+        <div class="stat-sub">Added on Empower</div>
+      </div>
+
+      <div class="stat-card glass">
+        <span class="stat-label">My Watchlist</span>
+        <div class="stat-value" id="stat-watched-count" style="color: #facc15;">0</div>
+        <div class="stat-sub">Tracked for instant alert</div>
+      </div>
+    </div>
+
+    <!-- Filters & Toolbar -->
+    <div class="toolbar-panel glass">
+      <!-- Search & Main Selects -->
+      <div class="search-row">
+        <div class="search-input-wrap">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="search-input" placeholder="Search by course code (e.g. CSCS 101), title, instructor, or room..." />
+        </div>
+
+        <select id="dept-select" class="input-select" style="min-width: 180px;">
+          <option value="ALL">All Departments</option>
+        </select>
+
+        <select id="sort-select" class="input-select">
+          <option value="course_code">Sort: Course Code</option>
+          <option value="available_asc">Sort: Least Available Seats</option>
+          <option value="available_desc">Sort: Most Available Seats</option>
+          <option value="title">Sort: Course Title</option>
+          <option value="dept">Sort: Department</option>
+        </select>
+
+        <div style="display: flex; gap: 0.4rem;">
+          <button id="view-grid-btn" class="chip active" title="Grid View">Grid</button>
+          <button id="view-table-btn" class="chip" title="Table View">Table</button>
+          <button class="btn btn-secondary" onclick="exportToCSV()" title="Export Catalog to CSV">📥 CSV</button>
+        </div>
+      </div>
+
+      <!-- Filter Chips Row -->
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem;">
+        <!-- Status chips -->
+        <div class="filter-chips">
+          <span style="font-size: 0.75rem; color: var(--text-dim); margin-right: 0.25rem;">Status:</span>
+          <button class="chip active" data-status="all">All</button>
+          <button class="chip" data-status="open">🟢 Available</button>
+          <button class="chip chip-amber" data-status="low">🟡 Low Seats (&le; 3)</button>
+          <button class="chip chip-rose" data-status="full">🔴 Full (0 seats)</button>
+          <button class="chip" data-status="new" style="border-color: rgba(34, 211, 238, 0.4); color: #67e8f9;">🆕 New Sections</button>
+          <button class="chip chip-yellow" data-status="watched">⭐ Watched Only</button>
+        </div>
+
+        <!-- Level filter chips (100-400 & MATH 095) -->
+        <div class="filter-chips">
+          <span style="font-size: 0.75rem; color: var(--text-dim); margin-right: 0.25rem;">Level:</span>
+          <button class="chip active" data-level="ALL">All Levels</button>
+          <button class="chip" data-level="100">100</button>
+          <button class="chip" data-level="200">200</button>
+          <button class="chip" data-level="300">300</button>
+          <button class="chip" data-level="400">400</button>
+          <button class="chip chip-amber" data-level="095">MATH 095</button>
+        </div>
+
+        <!-- Day filter chips -->
+        <div class="filter-chips">
+          <span style="font-size: 0.75rem; color: var(--text-dim); margin-right: 0.25rem;">Day:</span>
+          <button class="chip active" data-day="ALL">All</button>
+          <button class="chip" data-day="M">M</button>
+          <button class="chip" data-day="T">T</button>
+          <button class="chip" data-day="W">W</button>
+          <button class="chip" data-day="R">Th (R)</button>
+          <button class="chip" data-day="F">F</button>
+          <button class="chip" data-day="S">Sat</button>
+        </div>
+
+        <div id="filtered-count" style="font-size: 0.8rem; color: var(--text-muted); font-variant-numeric: tabular-nums;">
+          0 sections shown
+        </div>
+      </div>
+    </div>
+
+    <!-- Loading Spinner -->
+    <div id="courses-loading" class="empty-state" style="display: none;">
+      <div style="font-size: 2.5rem; margin-bottom: 1rem; animation: spin 1s linear infinite; display: inline-block;">⏳</div>
+      <h3>Fetching courses from Empower SIS...</h3>
+      <p>Parsing seat counts and schedules.</p>
+    </div>
+
+    <!-- Courses View Container -->
+    <div id="courses-container"></div>
+
+  </main>
+
+  <!-- Alerts History Modal -->
+  <div id="alerts-modal" class="modal-overlay" style="display: none;">
+    <div class="modal-content glass">
+      <div class="modal-header">
+        <h3 style="font-size: 1.1rem; font-weight: 700; color: #fff;">📋 Seat Opening Alerts History</h3>
+        <button class="btn btn-secondary btn-icon-only" onclick="closeAlertsModal()">✕</button>
+      </div>
+      <div id="alerts-modal-list" class="modal-body">
+        <!-- Rendered dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast notifications -->
+  <div id="toast-container"></div>
+
+  <!-- Footer -->
+  <footer style="margin-top: 4rem; padding: 2rem 0; border-top: 1px solid var(--border-color); text-align: center; font-size: 0.8rem; color: var(--text-dim);">
+    <div class="container">
+      <p>FCCU Spring 2027 Course & Seat Availability Monitor &bull; Built for Forman Christian College (A Chartered University) students.</p>
+      <p style="margin-top: 0.25rem;">Last Synced with Empower at: <span id="last-sync-time" style="color: var(--text-muted);">Syncing...</span></p>
+    </div>
+  </footer>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
