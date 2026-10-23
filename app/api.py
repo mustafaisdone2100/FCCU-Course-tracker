@@ -12,8 +12,13 @@ from app.database import (
     get_departments,
     get_alerts,
     toggle_watchlist,
+    add_email_subscription,
+    get_user_subscriptions,
+    remove_email_subscription,
 )
+from app.email_service import is_email_configured, get_email_provider, send_welcome_email
 from app.tracker import tracker_manager
+
 
 logger = logging.getLogger("fccu.api")
 router = APIRouter(prefix="/api")
@@ -145,7 +150,69 @@ async def trigger_simulate_alert(payload: Optional[Dict[str, str]] = None):
         "alert": alert
     }
 
+@router.get("/email/status")
+def email_status():
+    """Return whether email sending is configured and active provider."""
+    return {
+        "configured": is_email_configured(),
+        "provider": get_email_provider()
+    }
+
+@router.post("/subscriptions")
+async def create_subscription(payload: Dict[str, Any]):
+    """Subscribe an email address to course seat openings and new sections."""
+    email = payload.get("email", "").strip()
+    course_code = payload.get("course_code", "").strip()
+    section = payload.get("section", "ALL").strip()
+    uniqueness = payload.get("uniqueness")
+    title = payload.get("title", "")
+    term = payload.get("term", DEFAULT_TERM)
+    notify_seat_open = payload.get("notify_seat_open", True)
+    notify_new_section = payload.get("notify_new_section", True)
+
+    if not email or "@" not in email or "." not in email:
+        raise HTTPException(status_code=400, detail="Please enter a valid email address.")
+    if not course_code:
+        raise HTTPException(status_code=400, detail="Course code is required.")
+
+    sub = add_email_subscription(
+        email=email,
+        course_code=course_code,
+        section=section,
+        uniqueness=uniqueness,
+        term=term,
+        notify_seat_open=notify_seat_open,
+        notify_new_section=notify_new_section,
+    )
+
+    # Send an instant confirmation email in background
+    asyncio.create_task(send_welcome_email(email, course_code, section, title))
+
+    return {
+        "success": True,
+        "message": f"Subscribed! You will receive an instant email alert when seats open or new sections are added for {course_code}.",
+        "subscription": sub
+    }
+
+@router.get("/subscriptions")
+def list_subscriptions(email: str = Query(...)):
+    """Retrieve all active subscriptions for an email address."""
+    email_clean = email.strip()
+    if not email_clean:
+        return {"subscriptions": []}
+    subs = get_user_subscriptions(email_clean)
+    return {"subscriptions": subs}
+
+@router.delete("/subscriptions/{sub_id}")
+def unsubscribe(sub_id: int, email: Optional[str] = Query(None)):
+    """Unsubscribe from a course alert."""
+    success = remove_email_subscription(sub_id, email)
+    if not success:
+        raise HTTPException(status_code=404, detail="Subscription not found or already cancelled.")
+    return {"success": True, "message": "Successfully unsubscribed from alerts."}
+
 @router.get("/stream")
+
 async def event_stream(request: Request):
     """Server-Sent Events (SSE) stream for live alerts and updates."""
     queue = tracker_manager.add_listener()

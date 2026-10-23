@@ -90,6 +90,7 @@ class CourseTrackerManager:
             for alert in alerts:
                 await self.broadcast("seat_alert", alert)
                 asyncio.create_task(send_external_notification(alert))
+                asyncio.create_task(dispatch_email_alerts_for_event(alert))
 
             # Broadcast general update notification
             await self.broadcast("sync_completed", {
@@ -162,7 +163,51 @@ class CourseTrackerManager:
         if alert_data:
             await self.broadcast("seat_alert", alert_data)
             asyncio.create_task(send_external_notification(alert_data))
+            asyncio.create_task(dispatch_email_alerts_for_event(alert_data))
         return alert_data
+
+
+async def dispatch_email_alerts_for_event(alert: Dict[str, Any]):
+    """Finds matching email subscribers and sends alert emails."""
+    try:
+        from app.database import get_subscriptions_for_alert, record_subscription_notified
+        from app.email_service import dispatch_email_alert
+
+        alert_type = alert.get("alert_type", "SEAT_OPENED")
+        course_code = alert.get("course_code", "")
+        uniqueness = alert.get("uniqueness", "")
+        section = alert.get("section", "")
+        term = alert.get("term", "2027SP")
+
+        subs = await asyncio.to_thread(
+            get_subscriptions_for_alert, alert_type, course_code, uniqueness, section, term
+        )
+
+        if not subs:
+            return
+
+        logger.info(f"Dispatching email alerts to {len(subs)} subscriber(s) for {course_code} {section} ({alert_type})")
+        notified_ids = []
+        for sub in subs:
+            to_email = sub["email"]
+            success = await dispatch_email_alert(
+                to_email=to_email,
+                alert_type=alert_type,
+                course_code=course_code,
+                section=section,
+                title=alert.get("title", ""),
+                message=alert.get("message", ""),
+                available=alert.get("new_available", 0),
+                capacity=alert.get("capacity", 0),
+            )
+            if success:
+                notified_ids.append(sub["id"])
+
+        if notified_ids:
+            await asyncio.to_thread(record_subscription_notified, notified_ids)
+    except Exception as e:
+        logger.error(f"Error dispatching email alerts: {e}")
+
 
 
 async def send_external_notification(alert: Dict[str, Any]):

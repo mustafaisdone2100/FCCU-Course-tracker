@@ -94,6 +94,23 @@ def init_db():
             )
         """)
 
+        # Email Subscriptions table
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS email_subscriptions (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                email TEXT NOT NULL,
+                course_code TEXT NOT NULL,
+                section TEXT DEFAULT 'ALL',
+                uniqueness TEXT,
+                term TEXT NOT NULL,
+                notify_seat_open INTEGER DEFAULT 1,
+                notify_new_section INTEGER DEFAULT 1,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                last_notified_at TIMESTAMP DEFAULT NULL,
+                is_active INTEGER DEFAULT 1
+            )
+        """)
+
         # Indices for speedy queries
         cursor.execute("CREATE INDEX IF NOT EXISTS idx_courses_term ON courses(term)")
         cursor.execute("CREATE INDEX IF NOT EXISTS idx_courses_dept ON courses(dept)")
@@ -102,6 +119,10 @@ def init_db():
         cursor.execute("CREATE INDEX IF NOT EXISTS idx_alerts_term ON alerts(term)")
         cursor.execute("CREATE INDEX IF NOT EXISTS idx_alerts_created_at ON alerts(created_at DESC)")
         cursor.execute("CREATE INDEX IF NOT EXISTS idx_history_created_at ON seat_history(created_at DESC)")
+        cursor.execute("CREATE INDEX IF NOT EXISTS idx_subs_email ON email_subscriptions(email)")
+        cursor.execute("CREATE INDEX IF NOT EXISTS idx_subs_course_code ON email_subscriptions(course_code)")
+        cursor.execute("CREATE INDEX IF NOT EXISTS idx_subs_uniqueness ON email_subscriptions(uniqueness)")
+
         
         # Schema migration checks
         cursor.execute("PRAGMA table_info(courses)")
@@ -690,3 +711,125 @@ def simulate_new_section(term: str = "2027SP") -> Optional[Dict[str, Any]]:
             "capacity": cap,
             "created_at": now_iso
         }
+
+def add_email_subscription(
+    email: str,
+    course_code: str,
+    section: str = "ALL",
+    uniqueness: Optional[str] = None,
+    term: str = "2027SP",
+    notify_seat_open: bool = True,
+    notify_new_section: bool = True
+) -> Dict[str, Any]:
+    """Register or update an email alert subscription."""
+    email_clean = email.strip().lower()
+    course_code_clean = course_code.strip().upper()
+    sec_clean = (section or "ALL").strip().upper()
+
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        # Check if already subscribed to this exact combination
+        cursor.execute("""
+            SELECT id FROM email_subscriptions
+            WHERE email = ? AND course_code = ? AND section = ? AND term = ?
+        """, (email_clean, course_code_clean, sec_clean, term))
+        existing = cursor.fetchone()
+
+        if existing:
+            sub_id = existing["id"]
+            cursor.execute("""
+                UPDATE email_subscriptions
+                SET notify_seat_open = ?, notify_new_section = ?, is_active = 1, uniqueness = ?
+                WHERE id = ?
+            """, (int(notify_seat_open), int(notify_new_section), uniqueness, sub_id))
+        else:
+            cursor.execute("""
+                INSERT INTO email_subscriptions (
+                    email, course_code, section, uniqueness, term, notify_seat_open, notify_new_section, is_active
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, 1)
+            """, (
+                email_clean, course_code_clean, sec_clean, uniqueness, term,
+                int(notify_seat_open), int(notify_new_section)
+            ))
+            sub_id = cursor.lastrowid
+
+        conn.commit()
+        return {
+            "id": sub_id,
+            "email": email_clean,
+            "course_code": course_code_clean,
+            "section": sec_clean,
+            "term": term,
+            "notify_seat_open": bool(notify_seat_open),
+            "notify_new_section": bool(notify_new_section),
+        }
+
+def get_subscriptions_for_alert(alert_type: str, course_code: str, uniqueness: str, section: str, term: str) -> List[Dict[str, Any]]:
+    """Find all matching active email subscriptions for a triggered alert."""
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        course_clean = course_code.strip().upper()
+        sec_clean = section.strip().upper()
+
+        if alert_type == "SEAT_OPENED":
+            cursor.execute("""
+                SELECT * FROM email_subscriptions
+                WHERE term = ? 
+                  AND is_active = 1 
+                  AND notify_seat_open = 1
+                  AND (
+                      uniqueness = ? 
+                      OR (course_code = ? AND (section = ? OR section = 'ALL'))
+                  )
+            """, (term, uniqueness, course_clean, sec_clean))
+        elif alert_type == "NEW_SECTION":
+            cursor.execute("""
+                SELECT * FROM email_subscriptions
+                WHERE term = ? 
+                  AND is_active = 1 
+                  AND notify_new_section = 1
+                  AND course_code = ?
+            """, (term, course_clean))
+        else:
+            return []
+
+        return [dict(r) for r in cursor.fetchall()]
+
+def get_user_subscriptions(email: str) -> List[Dict[str, Any]]:
+    """Retrieve all active subscriptions for a given email."""
+    email_clean = email.strip().lower()
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute("""
+            SELECT s.*, c.title, c.available, c.capacity, c.seat_status
+            FROM email_subscriptions s
+            LEFT JOIN courses c ON s.uniqueness = c.uniqueness
+            WHERE s.email = ? AND s.is_active = 1
+            ORDER BY s.created_at DESC
+        """, (email_clean,))
+        return [dict(r) for r in cursor.fetchall()]
+
+def remove_email_subscription(subscription_id: int, email: Optional[str] = None) -> bool:
+    """Deactivate an email subscription."""
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        if email:
+            cursor.execute("UPDATE email_subscriptions SET is_active = 0 WHERE id = ? AND email = ?", (subscription_id, email.strip().lower()))
+        else:
+            cursor.execute("UPDATE email_subscriptions SET is_active = 0 WHERE id = ?", (subscription_id,))
+        conn.commit()
+        return cursor.rowcount > 0
+
+def record_subscription_notified(subscription_ids: List[int]):
+    """Update last_notified_at timestamp for subscribers who received an email."""
+    if not subscription_ids:
+        return
+    now_iso = datetime.now(timezone.utc).isoformat()
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        cursor.executemany(
+            "UPDATE email_subscriptions SET last_notified_at = ? WHERE id = ?",
+            [(now_iso, sid) for sid in subscription_ids]
+        )
+        conn.commit()
+

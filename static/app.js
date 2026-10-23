@@ -585,6 +585,14 @@ function renderCourseCard(c) {
           </span>
         </div>
       </div>
+
+      <!-- Action Bar with Email Alert Button -->
+      <div class="card-action-bar">
+        <button class="btn-notify-card" onclick="openSubscribeModal('${c.uniqueness}', '${c.course_code}', '${c.section}', '${(c.title || '').replace(/'/g, "\\'")}', event)">
+          <span>🔔</span>
+          <span>Notify Me on Email</span>
+        </button>
+      </div>
     </div>
   `;
 }
@@ -604,6 +612,7 @@ function renderCourseTable(courses) {
             <th>Room</th>
             <th>Seats (Avail / Cap)</th>
             <th>Status</th>
+            <th>Email Alert</th>
           </tr>
         </thead>
         <tbody>
@@ -628,11 +637,17 @@ function renderCourseTable(courses) {
                 <td>${c.classroom || "TBA"}</td>
                 <td><strong>${c.available}</strong> / ${c.capacity}</td>
                 <td><span class="status-pill ${pillClass}">${pillText}</span></td>
+                <td>
+                  <button class="btn-notify-sm" onclick="openSubscribeModal('${c.uniqueness}', '${c.course_code}', '${c.section}', '${(c.title || '').replace(/'/g, "\\'")}', event)">
+                    🔔 Alert
+                  </button>
+                </td>
               </tr>
             `;
           }).join("")}
         </tbody>
       </table>
+
     </div>
   `;
 }
@@ -854,3 +869,200 @@ document.addEventListener("DOMContentLoaded", async () => {
   await loadAllData();
   startCountdownTimer();
 });
+
+// ==========================================
+// Email Alert Subscriptions Management
+// ==========================================
+
+let currentSubTarget = null;
+
+function openSubscribeModal(uniqueness, courseCode, section, title, event) {
+  if (event) event.stopPropagation();
+
+  currentSubTarget = { uniqueness, courseCode, section, title };
+  document.getElementById("sub-modal-code").textContent = courseCode;
+  document.getElementById("sub-modal-sec").textContent = `Sec ${section}`;
+  document.getElementById("sub-modal-title").textContent = title;
+
+  // Pre-fill email if previously saved
+  const savedEmail = localStorage.getItem("fccu_user_email") || "";
+  const emailInput = document.getElementById("sub-email-input");
+  if (emailInput) {
+    emailInput.value = savedEmail;
+  }
+
+  // Reset options and status
+  document.getElementById("sub-opt-seat").checked = true;
+  document.getElementById("sub-opt-newsec").checked = true;
+  const statusMsg = document.getElementById("sub-status-msg");
+  statusMsg.style.display = "none";
+  statusMsg.textContent = "";
+
+  document.getElementById("subscribe-modal").style.display = "flex";
+}
+
+function closeSubscribeModal() {
+  document.getElementById("subscribe-modal").style.display = "none";
+  currentSubTarget = null;
+}
+
+async function submitSubscription(e) {
+  e.preventDefault();
+  if (!currentSubTarget) return;
+
+  const emailInput = document.getElementById("sub-email-input");
+  const email = emailInput.value.trim();
+  const notifySeatOpen = document.getElementById("sub-opt-seat").checked;
+  const notifyNewSection = document.getElementById("sub-opt-newsec").checked;
+  const submitBtn = document.getElementById("sub-submit-btn");
+  const statusMsg = document.getElementById("sub-status-msg");
+
+  if (!email) return;
+  if (!notifySeatOpen && !notifyNewSection) {
+    statusMsg.style.display = "block";
+    statusMsg.style.background = "rgba(239, 68, 68, 0.2)";
+    statusMsg.style.border = "1px solid #ef4444";
+    statusMsg.style.color = "#fca5a5";
+    statusMsg.textContent = "Please select at least one notification option.";
+    return;
+  }
+
+  // Save email locally for convenience
+  localStorage.setItem("fccu_user_email", email);
+
+  const origBtn = submitBtn.innerHTML;
+  submitBtn.disabled = true;
+  submitBtn.innerHTML = `<span>⏳</span> Subscribing...`;
+
+  try {
+    const res = await fetch("/api/subscriptions", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email: email,
+        course_code: currentSubTarget.courseCode,
+        section: currentSubTarget.section,
+        uniqueness: currentSubTarget.uniqueness,
+        title: currentSubTarget.title,
+        term: state.activeTerm,
+        notify_seat_open: notifySeatOpen,
+        notify_new_section: notifyNewSection,
+      }),
+    });
+    const data = await res.json();
+
+    if (res.ok && data.success) {
+      statusMsg.style.display = "block";
+      statusMsg.style.background = "rgba(16, 185, 129, 0.2)";
+      statusMsg.style.border = "1px solid #10b981";
+      statusMsg.style.color = "#6ee7b7";
+      statusMsg.innerHTML = `✅ <strong>Alert Active!</strong> We will email <em>${email}</em> immediately when a seat opens or new section is added.`;
+      showToast(`🔔 Email alert confirmed for ${currentSubTarget.courseCode} Sec ${currentSubTarget.section}!`, "success");
+
+      setTimeout(() => {
+        closeSubscribeModal();
+      }, 1800);
+    } else {
+      statusMsg.style.display = "block";
+      statusMsg.style.background = "rgba(239, 68, 68, 0.2)";
+      statusMsg.style.border = "1px solid #ef4444";
+      statusMsg.style.color = "#fca5a5";
+      statusMsg.textContent = data.detail || "Failed to save subscription.";
+    }
+  } catch (err) {
+    statusMsg.style.display = "block";
+    statusMsg.style.background = "rgba(239, 68, 68, 0.2)";
+    statusMsg.style.border = "1px solid #ef4444";
+    statusMsg.style.color = "#fca5a5";
+    statusMsg.textContent = "Network error. Please try again.";
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.innerHTML = origBtn;
+  }
+}
+
+function openManageSubscriptionsModal() {
+  const modal = document.getElementById("manage-subs-modal");
+  const emailInput = document.getElementById("manage-subs-email-input");
+  const savedEmail = localStorage.getItem("fccu_user_email") || "";
+  if (emailInput && savedEmail) {
+    emailInput.value = savedEmail;
+    lookupSubscriptions();
+  }
+  modal.style.display = "flex";
+}
+
+function closeManageSubscriptionsModal() {
+  document.getElementById("manage-subs-modal").style.display = "none";
+}
+
+async function lookupSubscriptions() {
+  const emailInput = document.getElementById("manage-subs-email-input");
+  const listEl = document.getElementById("manage-subs-list");
+  const email = emailInput.value.trim();
+
+  if (!email) {
+    listEl.innerHTML = `<div style="color: #94a3b8; font-size: 0.85rem; padding: 1rem; text-align: center;">Please enter your email address.</div>`;
+    return;
+  }
+
+  localStorage.setItem("fccu_user_email", email);
+  listEl.innerHTML = `<div style="color: #94a3b8; font-size: 0.85rem; padding: 1rem; text-align: center;">Searching for active alerts...</div>`;
+
+  try {
+    const res = await fetch(`/api/subscriptions?email=${encodeURIComponent(email)}`);
+    const data = await res.json();
+    const subs = data.subscriptions || [];
+
+    if (subs.length === 0) {
+      listEl.innerHTML = `
+        <div style="background: rgba(15, 23, 42, 0.5); padding: 1.5rem; border-radius: 10px; text-align: center; color: #94a3b8; font-size: 0.85rem;">
+          No active alerts found for <strong>${email}</strong>.<br>
+          Click <strong>🔔 Notify Me on Email</strong> on any course card to set one up!
+        </div>
+      `;
+      return;
+    }
+
+    listEl.innerHTML = subs.map((s) => {
+      const secText = s.section && s.section !== "ALL" ? `Sec ${s.section}` : "All Sections";
+      return `
+        <div class="sub-item-card">
+          <div>
+            <div style="display: flex; align-items: center; gap: 0.4rem; margin-bottom: 0.2rem;">
+              <strong style="color: #60a5fa; font-size: 0.95rem;">${s.course_code}</strong>
+              <span class="section-badge" style="font-size: 0.7rem;">${secText}</span>
+              ${s.capacity ? `<span style="font-size: 0.7rem; color: #94a3b8;">(${s.available}/${s.capacity} seats)</span>` : ""}
+            </div>
+            <div style="font-size: 0.8rem; color: #94a3b8;">${s.title || ""}</div>
+            <div style="font-size: 0.7rem; color: #64748b; margin-top: 0.25rem;">
+              ${s.notify_seat_open ? "🟢 Seat Openings" : ""} ${s.notify_new_section ? "• 🆕 New Sections" : ""}
+            </div>
+          </div>
+          <button class="btn btn-secondary" style="color: #f87171; border-color: rgba(248, 113, 113, 0.3); font-size: 0.75rem; padding: 0.3rem 0.6rem;" onclick="cancelSubscription(${s.id})">
+            Unsubscribe
+          </button>
+        </div>
+      `;
+    }).join("");
+  } catch (err) {
+    listEl.innerHTML = `<div style="color: #f87171; font-size: 0.85rem; padding: 1rem; text-align: center;">Failed to fetch subscriptions.</div>`;
+  }
+}
+
+async function cancelSubscription(subId) {
+  const email = (document.getElementById("manage-subs-email-input").value || "").trim();
+  try {
+    const res = await fetch(`/api/subscriptions/${subId}?email=${encodeURIComponent(email)}`, { method: "DELETE" });
+    const data = await res.json();
+    if (res.ok) {
+      showToast("Unsubscribed from course alerts.", "info");
+      lookupSubscriptions();
+    } else {
+      showToast(data.detail || "Failed to unsubscribe", "warning");
+    }
+  } catch (e) {
+    showToast("Network error trying to unsubscribe.", "warning");
+  }
+}
+
