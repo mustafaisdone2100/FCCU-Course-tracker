@@ -23,6 +23,12 @@ from app.tracker import tracker_manager
 logger = logging.getLogger("fccu.api")
 router = APIRouter(prefix="/api")
 
+@router.get("/ping")
+@router.head("/ping")
+def api_ping():
+    """Ultra-lightweight ping endpoint for uptime monitors."""
+    return {"status": "ok"}
+
 @router.get("/terms")
 def list_terms():
     """Return available terms and primary default term."""
@@ -34,13 +40,16 @@ def list_terms():
 @router.get("/status")
 def get_tracker_status():
     """Get current status of scraper and background polling."""
+    err = tracker_manager.last_sync_error
+    if err and len(err) > 150:
+        err = err[:150] + "..."
     return {
         "active_term": tracker_manager.active_term,
         "is_running": tracker_manager.is_running,
         "is_refreshing": tracker_manager.is_refreshing,
         "poll_interval_seconds": tracker_manager.poll_interval,
         "last_sync_time": tracker_manager.last_sync_time,
-        "last_sync_error": tracker_manager.last_sync_error,
+        "last_sync_error": err,
         "active_listeners": len(tracker_manager._listeners),
     }
 

@@ -57,7 +57,14 @@ static_dir = BASE_DIR / "static"
 static_dir.mkdir(exist_ok=True)
 app.mount("/static", StaticFiles(directory=str(static_dir)), name="static")
 
+@app.get("/ping")
+@app.head("/ping")
+async def health_ping():
+    """Ultra-lightweight ping endpoint for uptime monitors and cron-job.org."""
+    return {"status": "ok"}
+
 @app.get("/")
+
 async def serve_index():
     index_file = static_dir / "index.html"
     if index_file.exists():
