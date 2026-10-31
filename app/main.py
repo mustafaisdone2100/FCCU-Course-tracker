@@ -64,11 +64,10 @@ async def health_ping():
     return {"status": "ok"}
 
 @app.get("/")
-
 async def serve_index():
     index_file = static_dir / "index.html"
     if index_file.exists():
-        return FileResponse(str(index_file))
+        return FileResponse(str(index_file), headers={"Cache-Control": "no-cache, must-revalidate"})
     return {"message": "FCCU Course Tracker API is live. Place index.html in /static."}
 
 if __name__ == "__main__":
