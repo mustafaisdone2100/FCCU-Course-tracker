@@ -111,6 +111,28 @@ def init_db():
             )
         """)
 
+        # Removed / Cancelled sections table
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS removed_sections (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                uniqueness TEXT UNIQUE,
+                term TEXT NOT NULL,
+                dept TEXT,
+                code TEXT,
+                course_code TEXT NOT NULL,
+                section TEXT NOT NULL,
+                title TEXT NOT NULL,
+                credit TEXT,
+                classroom TEXT,
+                schedule_raw TEXT,
+                instructor TEXT,
+                capacity INTEGER DEFAULT 0,
+                enrolled INTEGER DEFAULT 0,
+                removed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                reason TEXT DEFAULT 'Cancelled / Dropped from Empower SIS'
+            )
+        """)
+
         # Indices for speedy queries
         cursor.execute("CREATE INDEX IF NOT EXISTS idx_courses_term ON courses(term)")
         cursor.execute("CREATE INDEX IF NOT EXISTS idx_courses_dept ON courses(dept)")
@@ -122,8 +144,27 @@ def init_db():
         cursor.execute("CREATE INDEX IF NOT EXISTS idx_subs_email ON email_subscriptions(email)")
         cursor.execute("CREATE INDEX IF NOT EXISTS idx_subs_course_code ON email_subscriptions(course_code)")
         cursor.execute("CREATE INDEX IF NOT EXISTS idx_subs_uniqueness ON email_subscriptions(uniqueness)")
+        cursor.execute("CREATE INDEX IF NOT EXISTS idx_removed_term ON removed_sections(term)")
+        cursor.execute("CREATE INDEX IF NOT EXISTS idx_removed_at ON removed_sections(removed_at DESC)")
+
 
         
+        # Backfill removed sections from seat_history if any exist
+        cursor.execute("""
+            INSERT OR IGNORE INTO removed_sections (
+                uniqueness, term, dept, code, course_code, section, title, removed_at
+            )
+            SELECT 
+                h.uniqueness, h.term, 
+                substr(h.course_code, 1, instr(h.course_code, ' ') - 1) as dept,
+                substr(h.course_code, instr(h.course_code, ' ') + 1) as code,
+                h.course_code, h.section, h.title, max(h.created_at) as removed_at
+            FROM seat_history h
+            LEFT JOIN courses c ON h.uniqueness = c.uniqueness
+            WHERE h.change_type = 'SECTION_REMOVED' AND c.uniqueness IS NULL
+            GROUP BY h.uniqueness
+        """)
+
         # Schema migration checks
         cursor.execute("PRAGMA table_info(courses)")
         col_names = [col["name"] for col in cursor.fetchall()]
@@ -178,6 +219,7 @@ def purge_non_undergraduate_courses():
             cursor.executemany("DELETE FROM watchlist WHERE uniqueness = ?", [(u,) for u in to_delete])
             cursor.executemany("DELETE FROM alerts WHERE uniqueness = ?", [(u,) for u in to_delete])
             cursor.executemany("DELETE FROM seat_history WHERE uniqueness = ?", [(u,) for u in to_delete])
+            cursor.executemany("DELETE FROM removed_sections WHERE uniqueness = ?", [(u,) for u in to_delete])
             conn.commit()
             logger.info(f"Purged {len(to_delete)} non-undergraduate/pharmacy/IE course sections from database.")
 
@@ -204,7 +246,7 @@ def save_courses_and_detect_changes(
 
         # Load existing courses for this term to compare
         cursor.execute(
-            "SELECT uniqueness, course_code, section, title, capacity, available, is_full FROM courses WHERE term = ?",
+            "SELECT * FROM courses WHERE term = ?",
             (term,)
         )
         existing_map = {row["uniqueness"]: dict(row) for row in cursor.fetchall()}
@@ -356,13 +398,39 @@ def save_courses_and_detect_changes(
         # Remove sections that are no longer listed on Empower (keep only currently active Empower courses)
         current_uniques = {c["uniqueness"] for c in courses}
         removed_uniques = set(existing_map.keys()) - current_uniques
+
+        # If any currently active sections were previously marked as removed, restore them
+        if current_uniques:
+            cursor.execute(
+                f"DELETE FROM removed_sections WHERE uniqueness IN ({','.join(['?'] * len(current_uniques))})",
+                list(current_uniques)
+            )
+
         for rem_uniq in removed_uniques:
             old_item = existing_map[rem_uniq]
             logger.info(f"Section removed from Empower: {old_item['course_code']} Sec {old_item['section']}")
             cursor.execute("""
                 INSERT INTO seat_history (uniqueness, course_code, section, title, term, old_available, new_available, capacity, change_type, created_at)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-            """, (rem_uniq, old_item["course_code"], old_item["section"], old_item["title"], term, old_item["available"], 0, old_item["capacity"], "SECTION_REMOVED", now_iso))
+            """, (rem_uniq, old_item["course_code"], old_item["section"], old_item["title"], term, old_item.get("available", 0), 0, old_item.get("capacity", 0), "SECTION_REMOVED", now_iso))
+
+            cursor.execute("""
+                INSERT INTO removed_sections (
+                    uniqueness, term, dept, code, course_code, section, title, credit,
+                    classroom, schedule_raw, instructor, capacity, enrolled, removed_at
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                ON CONFLICT(uniqueness) DO UPDATE SET
+                    removed_at = excluded.removed_at,
+                    instructor = excluded.instructor,
+                    schedule_raw = excluded.schedule_raw
+            """, (
+                rem_uniq, term, old_item.get("dept"), old_item.get("code"),
+                old_item.get("course_code"), old_item.get("section"), old_item.get("title"),
+                old_item.get("credit", ""), old_item.get("classroom", ""), old_item.get("schedule_raw", ""),
+                old_item.get("instructor", "TBA"), old_item.get("capacity", 0), old_item.get("enrolled", 0),
+                now_iso
+            ))
+
             cursor.execute("DELETE FROM courses WHERE uniqueness = ?", (rem_uniq,))
 
         conn.commit()
@@ -510,6 +578,13 @@ def get_stats(term: str) -> Dict[str, Any]:
             WHERE term = ?
         """, (term,))
         row["alerts_count"] = cursor.fetchone()["alerts_count"]
+
+        cursor.execute("""
+            SELECT COUNT(*) as removed_count 
+            FROM removed_sections 
+            WHERE term = ?
+        """, (term,))
+        row["removed_sections_count"] = cursor.fetchone()["removed_count"]
 
         return row
 
@@ -832,4 +907,37 @@ def record_subscription_notified(subscription_ids: List[int]):
             [(now_iso, sid) for sid in subscription_ids]
         )
         conn.commit()
+
+def get_removed_sections(
+    term: str,
+    search: Optional[str] = None,
+    dept: Optional[str] = None,
+    limit: int = 250
+) -> List[Dict[str, Any]]:
+    """Retrieve sections that were previously listed on Empower SIS but cancelled or dropped."""
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        query = """
+            SELECT * FROM removed_sections
+            WHERE term = ?
+        """
+        params: List[Any] = [term]
+
+        if dept and dept.strip() and dept.upper() != "ALL":
+            query += " AND dept = ?"
+            params.append(dept.upper().strip())
+
+        if search and search.strip():
+            terms = search.strip().split()
+            for t in terms:
+                query += " AND (course_code LIKE ? OR title LIKE ? OR instructor LIKE ? OR classroom LIKE ?)"
+                kw = f"%{t}%"
+                params.extend([kw, kw, kw, kw])
+
+        query += " ORDER BY removed_at DESC, course_code ASC, section ASC LIMIT ?"
+        params.append(limit)
+
+        cursor.execute(query, params)
+        return [dict(r) for r in cursor.fetchall()]
+
 

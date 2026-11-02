@@ -78,6 +78,12 @@
           ✉️ My Alerts
         </button>
 
+        <!-- Removed Sections Button -->
+        <button class="btn btn-secondary" onclick="openRemovedSectionsModal()" title="View courses and sections removed or cancelled on Empower">
+          🗑️ Removed (<span id="removed-badge">0</span>)
+        </button>
+
+
       </div>
     </div>
   </header>
@@ -141,6 +147,12 @@
         <div class="stat-sub">Added on Empower</div>
       </div>
 
+      <div class="stat-card glass" style="cursor: pointer;" onclick="switchToRemovedFilter()" title="Click to view sections dropped or cancelled on Empower">
+        <span class="stat-label">Cancelled / Removed</span>
+        <div class="stat-value" id="stat-removed-sections" style="color: #fda4af;">0</div>
+        <div class="stat-sub">Dropped on Empower</div>
+      </div>
+
       <div class="stat-card glass">
         <span class="stat-label">My Watchlist</span>
         <div class="stat-value" id="stat-watched-count" style="color: #facc15;">0</div>
@@ -187,6 +199,7 @@
           <button class="chip chip-rose" data-status="full">🔴 Full (0 seats)</button>
           <button class="chip" data-status="new" style="border-color: rgba(34, 211, 238, 0.4); color: #67e8f9;">🆕 New Sections</button>
           <button class="chip chip-yellow" data-status="watched">⭐ Watched Only</button>
+          <button class="chip" data-status="removed" style="border-color: rgba(244, 63, 94, 0.4); color: #fda4af;">🗑️ Removed (<span id="chip-removed-count">0</span>)</button>
         </div>
 
         <!-- Level filter chips (100-400 & MATH 095) -->
@@ -352,6 +365,39 @@
       </div>
     </div>
   </div>
+
+  <!-- Removed / Cancelled Sections Modal -->
+  <div id="removed-modal" class="modal-overlay" style="display: none;">
+    <div class="modal-content glass" style="max-width: 680px;">
+      <div class="modal-header">
+        <div style="display: flex; align-items: center; gap: 0.6rem;">
+          <span style="font-size: 1.4rem;">🗑️</span>
+          <div>
+            <h3 style="font-size: 1.15rem; font-weight: 700; color: #fff; margin: 0;">Cancelled / Removed Sections</h3>
+            <p style="font-size: 0.75rem; color: #94a3b8; margin: 0;">Sections that were previously listed on Empower SIS but were dropped by departments</p>
+          </div>
+        </div>
+        <button class="btn btn-secondary btn-icon-only" onclick="closeRemovedSectionsModal()">✕</button>
+      </div>
+
+      <div class="modal-body">
+        <div style="margin-bottom: 1rem;">
+          <input 
+            type="text" 
+            id="removed-modal-search" 
+            class="input-search" 
+            style="width: 100%; border-radius: 8px; font-size: 0.9rem;" 
+            placeholder="Search cancelled courses (e.g. BUSN 101, instructor)..." 
+            oninput="filterRemovedModalList()"
+          />
+        </div>
+        <div id="removed-modal-list" style="display: flex; flex-direction: column; gap: 0.75rem; max-height: 440px; overflow-y: auto;">
+          <!-- Dynamically populated -->
+        </div>
+      </div>
+    </div>
+  </div>
+
 
 
   <!-- Toast notifications -->

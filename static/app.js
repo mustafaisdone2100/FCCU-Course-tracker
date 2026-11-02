@@ -9,6 +9,7 @@ const state = {
   departments: [],
   stats: null,
   alerts: [],
+  removedSections: [],
   searchQuery: "",
   selectedDept: "ALL",
   selectedStatus: "all",
@@ -272,6 +273,26 @@ async function loadAlerts() {
   }
 }
 
+async function loadRemovedSections() {
+  try {
+    const res = await fetch(`/api/removed-sections?term=${encodeURIComponent(state.activeTerm)}`);
+    const data = await res.json();
+    state.removedSections = data.removed_sections || [];
+    const count = state.removedSections.length;
+    const badge = document.getElementById("removed-badge");
+    if (badge) {
+      badge.textContent = count;
+      badge.style.display = count > 0 ? "inline-block" : "none";
+    }
+    const chipCount = document.getElementById("chip-removed-count");
+    if (chipCount) chipCount.textContent = count;
+    const statRem = document.getElementById("stat-removed-sections");
+    if (statRem) statRem.textContent = count;
+  } catch (e) {
+    console.error("Failed to load removed sections:", e);
+  }
+}
+
 async function loadCourses(showSpinner = true) {
   if (showSpinner) {
     document.getElementById("courses-loading").style.display = "block";
@@ -303,7 +324,7 @@ async function refreshFromEmpower() {
     const data = await res.json();
     if (data.success) {
       showToast(`✅ Synced with Empower! ${data.courses_count} courses updated.`, "success");
-      await Promise.all([loadCourses(false), loadStats(), loadDepartments()]);
+      await Promise.all([loadCourses(false), loadStats(), loadDepartments(), loadRemovedSections()]);
       resetCountdown();
     } else {
       showToast(`Sync warning: ${data.message || data.error}`, "warning");
@@ -408,6 +429,15 @@ function renderStats() {
   document.getElementById("stat-low-count").textContent = `${s.low_sections || 0} low seats`;
   const newSecEl = document.getElementById("stat-new-sections");
   if (newSecEl) newSecEl.textContent = s.new_sections || 0;
+  const remSecEl = document.getElementById("stat-removed-sections");
+  if (remSecEl) remSecEl.textContent = s.removed_sections_count || 0;
+  const chipRemEl = document.getElementById("chip-removed-count");
+  if (chipRemEl) chipRemEl.textContent = s.removed_sections_count || 0;
+  const remBadge = document.getElementById("removed-badge");
+  if (remBadge) {
+    remBadge.textContent = s.removed_sections_count || 0;
+    remBadge.style.display = (s.removed_sections_count > 0) ? "inline-block" : "none";
+  }
   document.getElementById("stat-watched-count").textContent = s.watched_count || 0;
 }
 
@@ -422,6 +452,56 @@ function updateAlertBadge() {
 function renderCourses() {
   const container = document.getElementById("courses-container");
   if (!container) return;
+
+  // If viewing removed / cancelled sections
+  if (state.selectedStatus === "removed") {
+    let filteredRemoved = state.removedSections.filter((c) => {
+      if (state.selectedDept !== "ALL" && c.dept !== state.selectedDept) return false;
+      if (state.searchQuery.trim()) {
+        const q = state.searchQuery.toLowerCase().trim();
+        const match =
+          c.course_code.toLowerCase().includes(q) ||
+          c.title.toLowerCase().includes(q) ||
+          (c.instructor && c.instructor.toLowerCase().includes(q)) ||
+          (c.classroom && c.classroom.toLowerCase().includes(q));
+        if (!match) return false;
+      }
+      return true;
+    });
+
+    document.getElementById("filtered-count").textContent = `${filteredRemoved.length} cancelled section${filteredRemoved.length === 1 ? "" : "s"} shown`;
+
+    if (filteredRemoved.length === 0) {
+      container.innerHTML = `
+        <div class="empty-state">
+          <div style="font-size: 3rem; margin-bottom: 1rem;">✅</div>
+          <h3>No removed sections found</h3>
+          <p>No course sections match your search among cancelled sections.</p>
+          <button class="btn btn-secondary" style="margin-top: 1rem;" onclick="resetFilters()">Reset All Filters</button>
+        </div>
+      `;
+      return;
+    }
+
+    if (state.viewMode === "grid") {
+      container.innerHTML = `
+        <div style="background: rgba(244, 63, 94, 0.1); border: 1px solid rgba(244, 63, 94, 0.3); border-radius: 12px; padding: 1rem 1.25rem; margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem;">
+          <div style="display: flex; align-items: center; gap: 0.6rem;">
+            <span style="font-size: 1.5rem;">🗑️</span>
+            <div>
+              <strong style="color: #fda4af; font-size: 0.95rem;">Cancelled / Removed Sections (${filteredRemoved.length})</strong>
+              <div style="color: #cbd5e1; font-size: 0.8rem;">These sections were previously listed on Empower SIS for Spring 2027 but have been cancelled or withdrawn by departments.</div>
+            </div>
+          </div>
+          <button class="btn btn-secondary" style="font-size: 0.75rem;" onclick="resetFilters()">← Back to Active Courses</button>
+        </div>
+        <div class="courses-grid">${filteredRemoved.map(renderRemovedCourseCard).join("")}</div>
+      `;
+    } else {
+      container.innerHTML = renderRemovedCourseTable(filteredRemoved);
+    }
+    return;
+  }
 
   // Filter courses in memory
   let filtered = state.courses.filter((c) => {
@@ -787,7 +867,8 @@ async function loadAllData() {
     loadCourses(),
     loadStats(),
     loadDepartments(),
-    loadAlerts()
+    loadAlerts(),
+    loadRemovedSections()
   ]);
   resetCountdown();
 }
@@ -1065,4 +1146,170 @@ async function cancelSubscription(subId) {
     showToast("Network error trying to unsubscribe.", "warning");
   }
 }
+
+// ==========================================
+// Cancelled / Removed Sections Functionality
+// ==========================================
+
+function renderRemovedCourseCard(c) {
+  const removedDate = c.removed_at ? new Date(c.removed_at).toLocaleDateString("en-US", { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" }) : "Recently";
+  return `
+    <div class="course-card glass is-removed" id="card-${c.uniqueness}" style="border-color: rgba(244, 63, 94, 0.35); background: rgba(26, 16, 24, 0.85);">
+      <div>
+        <div class="course-header">
+          <div class="course-code-wrap">
+            <span class="course-code-badge" style="background: rgba(244, 63, 94, 0.2); color: #fca5a5; text-decoration: line-through;">${c.course_code}</span>
+            <span class="section-badge" style="background: rgba(244, 63, 94, 0.25); color: #fda4af;">Sec ${c.section}</span>
+            <span style="background: #e11d48; color: #fff; font-size: 0.65rem; font-weight: 800; padding: 2px 6px; border-radius: 4px; letter-spacing: 0.05em;">CANCELLED</span>
+            <span class="dept-badge">${c.dept || ''}</span>
+          </div>
+        </div>
+
+        <h3 class="course-title" style="margin-top: 0.5rem; color: #e2e8f0;">${c.title}</h3>
+      </div>
+
+      <div style="background: rgba(244, 63, 94, 0.12); border: 1px solid rgba(244, 63, 94, 0.25); border-radius: 8px; padding: 0.6rem 0.8rem; margin: 0.85rem 0; font-size: 0.775rem; color: #fda4af; display: flex; align-items: center; justify-content: space-between;">
+        <span>⛔ Dropped from Empower</span>
+        <span style="font-size: 0.7rem; color: #fca5a5;">${removedDate}</span>
+      </div>
+
+      <!-- Details -->
+      <div class="course-meta">
+        <div class="meta-row">
+          <span style="color: var(--text-dim);">👤 Former Instructor:</span>
+          <strong style="color: #e5e7eb;">${c.instructor || "TBA"}</strong>
+        </div>
+        <div class="meta-row">
+          <span style="color: var(--text-dim);">📍 Room:</span>
+          <span>${c.classroom || "TBA"}</span>
+        </div>
+        <div class="meta-row">
+          <span style="color: var(--text-dim);">📅 Previous Schedule:</span>
+          <span style="font-size: 0.75rem; color: #cbd5e1;">${c.schedule_raw || "Schedule TBA"}</span>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function renderRemovedCourseTable(courses) {
+  return `
+    <div style="background: rgba(244, 63, 94, 0.1); border: 1px solid rgba(244, 63, 94, 0.3); border-radius: 12px; padding: 1rem 1.25rem; margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem;">
+      <div style="display: flex; align-items: center; gap: 0.6rem;">
+        <span style="font-size: 1.5rem;">🗑️</span>
+        <div>
+          <strong style="color: #fda4af; font-size: 0.95rem;">Cancelled / Removed Sections List (${courses.length})</strong>
+          <div style="color: #cbd5e1; font-size: 0.8rem;">These sections were previously listed on Empower SIS for Spring 2027 but have been cancelled or withdrawn by departments.</div>
+        </div>
+      </div>
+      <button class="btn btn-secondary" style="font-size: 0.75rem;" onclick="resetFilters()">← Back to Active Courses</button>
+    </div>
+    <div class="table-wrap glass">
+      <table class="courses-table">
+        <thead>
+          <tr>
+            <th>Status</th>
+            <th>Code</th>
+            <th>Sec</th>
+            <th>Title</th>
+            <th>Former Instructor</th>
+            <th>Previous Schedule</th>
+            <th>Room</th>
+            <th>Removed At</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${courses.map((c) => {
+            const removedDate = c.removed_at ? new Date(c.removed_at).toLocaleDateString("en-US", { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" }) : "Recently";
+            return `
+              <tr style="opacity: 0.85;">
+                <td><span style="background: #e11d48; color: #fff; font-size: 0.65rem; font-weight: 800; padding: 2px 6px; border-radius: 4px;">CANCELLED</span></td>
+                <td><strong style="text-decoration: line-through; color: #fca5a5;">${c.course_code}</strong></td>
+                <td><span class="section-badge" style="background: rgba(244, 63, 94, 0.2); color: #fda4af;">Sec ${c.section}</span></td>
+                <td>${c.title}</td>
+                <td>${c.instructor || "TBA"}</td>
+                <td><span style="font-size: 0.75rem; color: #a5b4fc;">${c.schedule_raw || "TBA"}</span></td>
+                <td>${c.classroom || "TBA"}</td>
+                <td><span style="font-size: 0.75rem; color: #fca5a5;">${removedDate}</span></td>
+              </tr>
+            `;
+          }).join("")}
+        </tbody>
+      </table>
+    </div>
+  `;
+}
+
+function openRemovedSectionsModal() {
+  const modal = document.getElementById("removed-modal");
+  renderRemovedModalList();
+  modal.style.display = "flex";
+}
+
+function closeRemovedSectionsModal() {
+  document.getElementById("removed-modal").style.display = "none";
+}
+
+function filterRemovedModalList() {
+  const q = (document.getElementById("removed-modal-search").value || "").toLowerCase().trim();
+  renderRemovedModalList(q);
+}
+
+function renderRemovedModalList(searchQuery = "") {
+  const listEl = document.getElementById("removed-modal-list");
+  if (!listEl) return;
+
+  let items = state.removedSections;
+  if (searchQuery) {
+    items = items.filter(c => 
+      c.course_code.toLowerCase().includes(searchQuery) ||
+      c.title.toLowerCase().includes(searchQuery) ||
+      (c.instructor && c.instructor.toLowerCase().includes(searchQuery))
+    );
+  }
+
+  if (items.length === 0) {
+    listEl.innerHTML = `
+      <div style="background: rgba(15, 23, 42, 0.5); padding: 2rem; border-radius: 10px; text-align: center; color: #94a3b8; font-size: 0.9rem;">
+        No cancelled or removed sections found.
+      </div>
+    `;
+    return;
+  }
+
+  listEl.innerHTML = items.map(c => {
+    const d = c.removed_at ? new Date(c.removed_at).toLocaleDateString("en-US", { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" }) : "Recently";
+    return `
+      <div style="background: rgba(30, 20, 28, 0.75); border: 1px solid rgba(244, 63, 94, 0.25); border-radius: 10px; padding: 0.85rem 1rem; display: flex; justify-content: space-between; align-items: center; gap: 0.75rem;">
+        <div>
+          <div style="display: flex; align-items: center; gap: 0.45rem; margin-bottom: 0.25rem;">
+            <strong style="color: #fca5a5; font-size: 1rem; text-decoration: line-through;">${c.course_code}</strong>
+            <span class="section-badge" style="background: rgba(244, 63, 94, 0.2); color: #fda4af;">Sec ${c.section}</span>
+            <span style="background: #e11d48; color: #fff; font-size: 0.65rem; font-weight: 800; padding: 1px 5px; border-radius: 4px;">CANCELLED</span>
+            <span style="font-size: 0.7rem; color: #94a3b8;">${c.credit ? c.credit + ' cr' : ''}</span>
+          </div>
+          <div style="font-size: 0.85rem; color: #e2e8f0; font-weight: 500;">${c.title}</div>
+          <div style="font-size: 0.75rem; color: #94a3b8; margin-top: 0.25rem; display: flex; gap: 0.8rem; flex-wrap: wrap;">
+            <span>👤 ${c.instructor || 'TBA'}</span>
+            <span>📍 ${c.classroom || 'TBA'}</span>
+            <span>📅 ${c.schedule_raw || 'Schedule TBA'}</span>
+          </div>
+        </div>
+        <div style="text-align: right; flex-shrink: 0;">
+          <div style="font-size: 0.7rem; color: #fda4af; font-weight: 600;">Dropped from Empower</div>
+          <div style="font-size: 0.7rem; color: #64748b;">${d}</div>
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
+function switchToRemovedFilter() {
+  document.querySelectorAll(".chip[data-status]").forEach(c => c.classList.remove("active"));
+  const chip = document.querySelector(".chip[data-status='removed']");
+  if (chip) chip.classList.add("active");
+  state.selectedStatus = "removed";
+  renderCourses();
+}
+
 

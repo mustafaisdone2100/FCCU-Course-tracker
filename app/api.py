@@ -15,6 +15,7 @@ from app.database import (
     add_email_subscription,
     get_user_subscriptions,
     remove_email_subscription,
+    get_removed_sections,
 )
 from app.email_service import is_email_configured, get_email_provider, send_welcome_email
 from app.tracker import tracker_manager
@@ -118,6 +119,21 @@ def query_alerts(term: Optional[str] = Query(None), limit: int = Query(50)):
     alerts = get_alerts(term=term, limit=limit)
     return {
         "alerts": alerts
+    }
+
+@router.get("/removed-sections")
+def query_removed_sections(
+    term: str = Query(DEFAULT_TERM),
+    search: Optional[str] = Query(None),
+    dept: Optional[str] = Query(None),
+    limit: int = Query(250)
+):
+    """Retrieve sections that were previously listed on Empower SIS but were removed or cancelled."""
+    removed = get_removed_sections(term=term, search=search, dept=dept, limit=limit)
+    return {
+        "term": term,
+        "count": len(removed),
+        "removed_sections": removed
     }
 
 @router.post("/refresh")

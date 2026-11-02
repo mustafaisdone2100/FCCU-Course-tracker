@@ -855,3 +855,21 @@ table.courses-table tr:hover td {
   align-items: center;
 }
 
+/* Cancelled / Removed Sections */
+.course-card.is-removed {
+  border: 1px solid rgba(244, 63, 94, 0.35) !important;
+  background: rgba(26, 16, 24, 0.85) !important;
+  box-shadow: 0 4px 16px rgba(225, 29, 72, 0.08);
+}
+
+.course-card.is-removed:hover {
+  border-color: rgba(244, 63, 94, 0.6) !important;
+}
+
+.chip[data-status="removed"].active {
+  background: rgba(225, 29, 72, 0.25) !important;
+  border-color: #f43f5e !important;
+  color: #fff !important;
+}
+
+
