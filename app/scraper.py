@@ -138,7 +138,11 @@ class EmpowerScraper:
             raise
 
     def parse_courses(self, html_content: str, term_id: str) -> List[Dict[str, Any]]:
-        """Parse grid rows from Empower catalog HTML into structured course objects."""
+        """
+        Parse grid rows from Empower catalog HTML into structured course objects.
+        Handles both single-row courses and multi-row courses (e.g. Science courses
+        with separate lecture and laboratory/discussion sessions).
+        """
         if not html_content:
             return []
 
@@ -146,73 +150,122 @@ class EmpowerScraper:
         rows = soup.find_all("div", class_="ui-grid-row")
         courses: List[Dict[str, Any]] = []
 
-        for row in rows:
+        i = 0
+        while i < len(rows):
+            row = rows[i]
             cols = row.find_all("div", recursive=False)
-            if len(cols) < 8:
+            if not cols or len(cols) < 2:
+                i += 1
                 continue
 
             # Skip header row
-            col1_raw = cols[1].get_text(strip=True)
+            col1_raw = cols[1].get_text(separator=" ", strip=True).replace("\xa0", " ")
             if col1_raw.lower() in ["course", ""]:
+                i += 1
                 continue
 
-            course_full_text = cols[1].get_text(separator=" ", strip=True).replace("\xa0", " ")
-            
-            # Extract dept, code, section, title
-            # Typical formats:
-            # "ARTS 101 A Intro. Art & Design"
-            # "CSCS 201 B Data Structures"
-            # "MGMT 605 01 Business Strategy"
+            # Extract dept, code, section, title from primary course row
             course_match = re.match(
-                r"^([A-Z]{2,6})\s+([0-9]{3}[A-Z]?)\s+([A-Za-z0-9]+)\s+(.+)$",
-                course_full_text
+                r"^([A-Z]{2,6})\s+([0-9]{3}[A-Z]?)\s+([A-Za-z0-9]+)\s*(.*)$",
+                col1_raw
             )
-            if course_match:
-                dept, num, section, title = course_match.groups()
-            else:
-                parts = course_full_text.split(maxsplit=3)
-                dept = parts[0] if len(parts) > 0 else "GEN"
+            if not course_match:
+                parts = col1_raw.split(maxsplit=3)
+                dept = parts[0] if len(parts) > 0 else ""
                 num = parts[1] if len(parts) > 1 else ""
                 section = parts[2] if len(parts) > 2 else "A"
-                title = parts[3] if len(parts) > 3 else course_full_text
+                title = parts[3] if len(parts) > 3 else col1_raw
+            else:
+                dept, num, section, title = course_match.groups()
+
+            # Must be valid dept and course code (e.g. BIOL 100, MATH 095)
+            if not re.match(r"^[A-Z]{2,6}$", dept) or not re.match(r"^\d{2,4}", num):
+                i += 1
+                continue
 
             # Filter out postgraduate courses (500+, 600+, etc.), pharmacy, and intensive english
             if not is_undergraduate_course(dept, num, title):
+                i += 1
                 continue
 
-            location = cols[0].get_text(strip=True)
-            credit = cols[2].get_text(strip=True)
-            classroom = cols[3].get_text(strip=True).replace("CLASS ROOM", "").strip()
-            schedule_raw = cols[4].get_text(separator=" ", strip=True)
-            instructor = cols[5].get_text(strip=True)
-            offer_raw = cols[6].get_text(strip=True)
-            avail_raw = cols[7].get_text(strip=True)
+            location = cols[0].get_text(strip=True) if len(cols) > 0 else ""
+            credit = cols[2].get_text(strip=True) if len(cols) > 2 else ""
+            classroom = cols[3].get_text(strip=True).replace("CLASS ROOM", "").strip() if len(cols) > 3 else ""
+            schedule_raw = cols[4].get_text(separator=" ", strip=True) if len(cols) > 4 else ""
+            instructor = cols[5].get_text(strip=True) if len(cols) > 5 else "TBA"
+            if not instructor:
+                instructor = "TBA"
 
-            # Parse schedule (start date, days, time)
-            # Example: "start:02/01/2027 M W F 11:00 - 11:50"
+            offer_raw = cols[6].get_text(strip=True) if len(cols) > 6 else ""
+            avail_raw = cols[7].get_text(strip=True) if len(cols) > 7 else ""
+
+            # Popover identifier
+            cid = ""
+            for a in row.find_all("a"):
+                if a.get("data-cid"):
+                    cid = a["data-cid"]
+                    break
+
+            # Collect multiple rooms and schedules for courses with lab/discussion sub-rows
+            additional_rooms = [classroom] if classroom else []
+            additional_schedules = [schedule_raw] if schedule_raw else []
+
+            i += 1
+            # Scan ahead for sub-rows (labs, discussion sessions, or seat numbers) belonging to this course
+            while i < len(rows):
+                next_row = rows[i]
+                next_cols = next_row.find_all("div", recursive=False)
+                if not next_cols or len(next_cols) < 2:
+                    i += 1
+                    continue
+
+                next_c1 = next_cols[1].get_text(separator=" ", strip=True).replace("\xa0", " ")
+                # If next row starts a new course header, stop scanning
+                if re.match(r"^[A-Z]{2,6}\s+[0-9]{3}[A-Z]?\s+[A-Za-z0-9]+", next_c1):
+                    break
+
+                # Sub-session row (e.g. 4 cols or 7 cols with lab details)
+                if len(next_cols) >= 3:
+                    sub_room = next_cols[1].get_text(strip=True).replace("CLASS ROOM", "").strip()
+                    sub_sched = next_cols[2].get_text(separator=" ", strip=True)
+                    if sub_room and sub_room not in additional_rooms:
+                        additional_rooms.append(sub_room)
+                    if sub_sched and sub_sched not in additional_schedules:
+                        additional_schedules.append(sub_sched)
+
+                # Sub-session row with capacity & available (col 4 & col 5)
+                if len(next_cols) >= 6:
+                    sub_offer = next_cols[4].get_text(strip=True)
+                    sub_avail = next_cols[5].get_text(strip=True)
+                    if sub_offer.isdigit() and int(sub_offer) > 0:
+                        offer_raw = sub_offer
+                    if sub_avail.isdigit():
+                        avail_raw = sub_avail
+
+                i += 1
+
+            # Parse composite schedule and classroom
+            all_schedules_str = " | ".join(additional_schedules) if additional_schedules else schedule_raw
+            combined_classroom = " / ".join(additional_rooms) if additional_rooms else classroom
+
+            # Parse start date
             start_date = ""
-            days_list = []
-            time_range = ""
-
-            start_match = re.search(r"start:(\d{2}/\d{2}/\d{4})", schedule_raw)
+            start_match = re.search(r"start:(\d{2}/\d{2}/\d{4})", all_schedules_str)
             if start_match:
                 start_date = start_match.group(1)
 
-            # Extract time range e.g. "11:00 - 11:50"
-            time_match = re.search(r"(\d{1,2}:\d{2}\s*-\s*\d{1,2}:\d{2})", schedule_raw)
-            if time_match:
-                time_range = time_match.group(1).replace(" ", "")
-                # normalize to e.g. 11:00 - 11:50
-                time_range = time_range.replace("-", " - ")
+            # Extract time ranges
+            time_matches = re.findall(r"(\d{1,2}:\d{2}\s*-\s*\d{1,2}:\d{2})", all_schedules_str)
+            clean_times = [tm.replace(" ", "").replace("-", " - ") for tm in time_matches]
+            time_range = " | ".join(clean_times) if clean_times else ""
 
             # Extract days (M, T, W, R, F, S, U)
-            # Days in Empower are usually uppercase letters like "M W F" or "T R"
-            sched_without_date = re.sub(r"start:\d{2}/\d{2}/\d{4}", "", schedule_raw)
-            if time_match:
-                sched_without_date = sched_without_date.replace(time_match.group(0), "")
-            
+            sched_without_date = re.sub(r"start:\d{2}/\d{2}/\d{4}", "", all_schedules_str)
+            for tm in time_matches:
+                sched_without_date = sched_without_date.replace(tm, "")
             day_tokens = re.findall(r"\b([MTWRFSU])\b", sched_without_date)
-            days_list = day_tokens if day_tokens else []
+            days_order = ["M", "T", "W", "R", "F", "S", "U"]
+            days_list = [d for d in days_order if d in set(day_tokens)]
 
             # Seats
             try:
@@ -235,14 +288,10 @@ class EmpowerScraper:
             else:
                 seat_status = "open"
 
-            # Popover identifier
-            cid = ""
-            for a in row.find_all("a"):
-                if a.get("data-cid"):
-                    cid = a["data-cid"]
-                    break
-
             uniqueness = f"{term_id}_{dept}_{num}_{section}"
+
+            # Clean leading asterisk or extra spaces in title
+            clean_title = re.sub(r"^\*\s*", "", title).strip()
 
             courses.append({
                 "uniqueness": uniqueness,
@@ -251,10 +300,10 @@ class EmpowerScraper:
                 "code": num,
                 "course_code": f"{dept} {num}",
                 "section": section,
-                "title": title,
+                "title": clean_title,
                 "credit": credit,
-                "classroom": classroom,
-                "schedule_raw": schedule_raw,
+                "classroom": combined_classroom,
+                "schedule_raw": all_schedules_str,
                 "start_date": start_date,
                 "days": days_list,
                 "time_range": time_range,
