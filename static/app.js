@@ -453,6 +453,22 @@ function renderCourses() {
   const container = document.getElementById("courses-container");
   if (!container) return;
 
+  // Sync toolbar CSV button label & state
+  const csvBtn = document.getElementById("export-csv-btn");
+  if (csvBtn) {
+    if (state.selectedStatus === "removed") {
+      csvBtn.innerHTML = `📥 Removed CSV`;
+      csvBtn.title = "Download CSV exclusively for cancelled / removed sections";
+      csvBtn.style.borderColor = "rgba(244, 63, 94, 0.45)";
+      csvBtn.style.color = "#fda4af";
+    } else {
+      csvBtn.innerHTML = `📥 CSV`;
+      csvBtn.title = "Export Catalog to CSV";
+      csvBtn.style.borderColor = "";
+      csvBtn.style.color = "";
+    }
+  }
+
   // If viewing removed / cancelled sections
   if (state.selectedStatus === "removed") {
     let filteredRemoved = state.removedSections.filter((c) => {
@@ -485,7 +501,7 @@ function renderCourses() {
 
     if (state.viewMode === "grid") {
       container.innerHTML = `
-        <div style="background: rgba(244, 63, 94, 0.1); border: 1px solid rgba(244, 63, 94, 0.3); border-radius: 12px; padding: 1rem 1.25rem; margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem;">
+        <div style="background: rgba(244, 63, 94, 0.1); border: 1px solid rgba(244, 63, 94, 0.3); border-radius: 12px; padding: 1rem 1.25rem; margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem;">
           <div style="display: flex; align-items: center; gap: 0.6rem;">
             <span style="font-size: 1.5rem;">🗑️</span>
             <div>
@@ -493,7 +509,12 @@ function renderCourses() {
               <div style="color: #cbd5e1; font-size: 0.8rem;">These sections were previously listed on Empower SIS for Spring 2027 but have been cancelled or withdrawn by departments.</div>
             </div>
           </div>
-          <button class="btn btn-secondary" style="font-size: 0.75rem;" onclick="resetFilters()">← Back to Active Courses</button>
+          <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+            <button class="btn btn-secondary" onclick="exportRemovedToCSV()" title="Download CSV exclusively for removed sections" style="border-color: rgba(244, 63, 94, 0.4); color: #fda4af; font-size: 0.8rem; display: inline-flex; align-items: center; gap: 0.35rem;">
+              📥 <span>Download Removed CSV</span>
+            </button>
+            <button class="btn btn-secondary" style="font-size: 0.8rem;" onclick="resetFilters()">← Back to Active Courses</button>
+          </div>
         </div>
         <div class="courses-grid">${filteredRemoved.map(renderRemovedCourseCard).join("")}</div>
       `;
@@ -755,6 +776,11 @@ function resetFilters() {
 }
 
 function exportToCSV() {
+  if (state.selectedStatus === "removed") {
+    exportRemovedToCSV();
+    return;
+  }
+
   if (!state.courses.length) {
     showToast("No courses to export.", "warning");
     return;
@@ -785,6 +811,33 @@ function exportToCSV() {
   link.click();
   document.body.removeChild(link);
   showToast("📥 Exported course catalog to CSV!", "success");
+}
+
+function exportRemovedToCSV() {
+  const term = state.activeTerm || "2027SP";
+  let url = `/api/removed-sections/csv?term=${encodeURIComponent(term)}`;
+
+  // If search or department filter is active, pass it to filter the CSV
+  const modalSearch = document.getElementById("removed-modal-search");
+  const modalVal = modalSearch ? modalSearch.value.trim() : "";
+  if (modalVal) {
+    url += `&search=${encodeURIComponent(modalVal)}`;
+  } else if (state.selectedStatus === "removed") {
+    if (state.searchQuery && state.searchQuery.trim()) {
+      url += `&search=${encodeURIComponent(state.searchQuery.trim())}`;
+    }
+    if (state.selectedDept && state.selectedDept !== "ALL") {
+      url += `&dept=${encodeURIComponent(state.selectedDept)}`;
+    }
+  }
+
+  const link = document.createElement("a");
+  link.setAttribute("href", url);
+  link.setAttribute("download", `FCCU_Removed_Sections_${term}.csv`);
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  showToast("📥 Downloading Removed Sections CSV...", "success");
 }
 
 // Background sync countdown
@@ -1194,7 +1247,7 @@ function renderRemovedCourseCard(c) {
 
 function renderRemovedCourseTable(courses) {
   return `
-    <div style="background: rgba(244, 63, 94, 0.1); border: 1px solid rgba(244, 63, 94, 0.3); border-radius: 12px; padding: 1rem 1.25rem; margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem;">
+    <div style="background: rgba(244, 63, 94, 0.1); border: 1px solid rgba(244, 63, 94, 0.3); border-radius: 12px; padding: 1rem 1.25rem; margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem;">
       <div style="display: flex; align-items: center; gap: 0.6rem;">
         <span style="font-size: 1.5rem;">🗑️</span>
         <div>
@@ -1202,7 +1255,12 @@ function renderRemovedCourseTable(courses) {
           <div style="color: #cbd5e1; font-size: 0.8rem;">These sections were previously listed on Empower SIS for Spring 2027 but have been cancelled or withdrawn by departments.</div>
         </div>
       </div>
-      <button class="btn btn-secondary" style="font-size: 0.75rem;" onclick="resetFilters()">← Back to Active Courses</button>
+      <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+        <button class="btn btn-secondary" onclick="exportRemovedToCSV()" title="Download CSV exclusively for removed sections" style="border-color: rgba(244, 63, 94, 0.4); color: #fda4af; font-size: 0.8rem; display: inline-flex; align-items: center; gap: 0.35rem;">
+          📥 <span>Download Removed CSV</span>
+        </button>
+        <button class="btn btn-secondary" style="font-size: 0.8rem;" onclick="resetFilters()">← Back to Active Courses</button>
+      </div>
     </div>
     <div class="table-wrap glass">
       <table class="courses-table">

@@ -912,7 +912,7 @@ def get_removed_sections(
     term: str,
     search: Optional[str] = None,
     dept: Optional[str] = None,
-    limit: int = 250
+    limit: Optional[int] = 250
 ) -> List[Dict[str, Any]]:
     """Retrieve sections that were previously listed on Empower SIS but cancelled or dropped."""
     with get_connection() as conn:
@@ -934,8 +934,10 @@ def get_removed_sections(
                 kw = f"%{t}%"
                 params.extend([kw, kw, kw, kw])
 
-        query += " ORDER BY removed_at DESC, course_code ASC, section ASC LIMIT ?"
-        params.append(limit)
+        query += " ORDER BY removed_at DESC, course_code ASC, section ASC"
+        if limit and limit > 0:
+            query += " LIMIT ?"
+            params.append(limit)
 
         cursor.execute(query, params)
         return [dict(r) for r in cursor.fetchall()]

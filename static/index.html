@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>FCCU Course Tracker | Spring 2027 Seat Availability</title>
   <meta name="description" content="Real-time course seat tracker and seat-opening alert system for FCCU Spring 2027 course registration." />
-  <link rel="stylesheet" href="/static/styles.css?v=2" />
+  <link rel="stylesheet" href="/static/styles.css?v=3" />
   <link rel="icon" type="image/png" href="/static/fccu-logo.png" />
 </head>
 <body>
@@ -184,7 +184,7 @@
         <div style="display: flex; gap: 0.4rem;">
           <button id="view-grid-btn" class="chip active" title="Grid View">Grid</button>
           <button id="view-table-btn" class="chip" title="Table View">Table</button>
-          <button class="btn btn-secondary" onclick="exportToCSV()" title="Export Catalog to CSV">📥 CSV</button>
+          <button id="export-csv-btn" class="btn btn-secondary" onclick="exportToCSV()" title="Export Catalog to CSV">📥 CSV</button>
         </div>
       </div>
 
@@ -381,15 +381,23 @@
       </div>
 
       <div class="modal-body">
-        <div style="margin-bottom: 1rem;">
+        <div style="margin-bottom: 1rem; display: flex; gap: 0.6rem; align-items: center; flex-wrap: wrap;">
           <input 
             type="text" 
             id="removed-modal-search" 
             class="input-search" 
-            style="width: 100%; border-radius: 8px; font-size: 0.9rem;" 
+            style="flex: 1; min-width: 220px; border-radius: 8px; font-size: 0.9rem;" 
             placeholder="Search cancelled courses (e.g. BUSN 101, instructor)..." 
             oninput="filterRemovedModalList()"
           />
+          <button 
+            class="btn btn-secondary" 
+            onclick="exportRemovedToCSV()" 
+            title="Download CSV file exclusively for cancelled / removed sections"
+            style="border-color: rgba(244, 63, 94, 0.4); color: #fda4af; font-size: 0.85rem; padding: 0.55rem 0.9rem; display: inline-flex; align-items: center; gap: 0.4rem; white-space: nowrap;"
+          >
+            📥 <span>Download Removed CSV</span>
+          </button>
         </div>
         <div id="removed-modal-list" style="display: flex; flex-direction: column; gap: 0.75rem; max-height: 440px; overflow-y: auto;">
           <!-- Dynamically populated -->
@@ -411,6 +419,6 @@
     </div>
   </footer>
 
-  <script src="/static/app.js"></script>
+  <script src="/static/app.js?v=3"></script>
 </body>
 </html>

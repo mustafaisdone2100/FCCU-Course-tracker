@@ -1,9 +1,11 @@
 import asyncio
+import csv
+import io
 import json
 import logging
 from typing import Optional, Dict, Any
 from fastapi import APIRouter, Query, HTTPException, Request
-from fastapi.responses import StreamingResponse
+from fastapi.responses import Response, StreamingResponse
 
 from app.config import SUPPORTED_TERMS, DEFAULT_TERM
 from app.database import (
@@ -135,6 +137,64 @@ def query_removed_sections(
         "count": len(removed),
         "removed_sections": removed
     }
+
+@router.get("/removed-sections/csv")
+def download_removed_sections_csv(
+    term: str = Query(DEFAULT_TERM),
+    search: Optional[str] = Query(None),
+    dept: Optional[str] = Query(None)
+):
+    """Download a CSV file containing all cancelled/removed sections for the term."""
+    removed = get_removed_sections(term=term, search=search, dept=dept, limit=None)
+
+    output = io.StringIO()
+    writer = csv.writer(output, quoting=csv.QUOTE_MINIMAL)
+
+    # Headers
+    writer.writerow([
+        "Term",
+        "Department",
+        "Course Code",
+        "Section",
+        "Course Title",
+        "Credit Hours",
+        "Former Instructor",
+        "Classroom",
+        "Previous Schedule",
+        "Capacity",
+        "Enrolled",
+        "Date Removed",
+        "Status / Reason"
+    ])
+
+    for r in removed:
+        writer.writerow([
+            r.get("term", term),
+            r.get("dept", ""),
+            r.get("course_code", ""),
+            r.get("section", ""),
+            r.get("title", ""),
+            r.get("credit", "3.00"),
+            r.get("instructor", "TBA"),
+            r.get("classroom", "TBA"),
+            r.get("schedule_raw", "TBA"),
+            r.get("capacity", 0),
+            r.get("enrolled", 0),
+            r.get("removed_at", ""),
+            r.get("reason", "Cancelled / Dropped from Empower SIS")
+        ])
+
+    csv_bytes = output.getvalue().encode("utf-8-sig")
+    filename = f"FCCU_Removed_Sections_{term}.csv"
+
+    return Response(
+        content=csv_bytes,
+        media_type="text/csv; charset=utf-8",
+        headers={
+            "Content-Disposition": f'attachment; filename="{filename}"',
+            "Cache-Control": "no-cache"
+        }
+    )
 
 @router.post("/refresh")
 async def trigger_refresh(term: str = Query(DEFAULT_TERM)):
