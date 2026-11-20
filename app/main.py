@@ -67,7 +67,14 @@ async def health_ping():
 async def serve_index():
     index_file = static_dir / "index.html"
     if index_file.exists():
-        return FileResponse(str(index_file), headers={"Cache-Control": "no-cache, must-revalidate"})
+        return FileResponse(
+            str(index_file),
+            headers={
+                "Cache-Control": "no-cache, no-store, must-revalidate",
+                "Pragma": "no-cache",
+                "Expires": "0"
+            }
+        )
     return {"message": "FCCU Course Tracker API is live. Place index.html in /static."}
 
 if __name__ == "__main__":

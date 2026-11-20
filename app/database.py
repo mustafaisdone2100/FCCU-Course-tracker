@@ -4,7 +4,7 @@ import logging
 import re
 from datetime import datetime, timezone
 from typing import Dict, List, Optional, Any, Tuple
-from app.config import DB_PATH
+from app.config import DB_PATH, BASE_DIR
 
 logger = logging.getLogger("fccu.database")
 
@@ -178,6 +178,65 @@ def init_db():
     
     # Automatically clean any non-undergraduate (500+) courses
     purge_non_undergraduate_courses()
+
+    # Automatically seed initial courses and removed sections (for Render cold starts)
+    seed_initial_data()
+
+def seed_initial_data():
+    """Seed initial courses and removed sections if database is empty/fresh (e.g. on Render deploys)."""
+    seed_removed_path = BASE_DIR / "data" / "seed_removed_sections.json"
+    seed_courses_path = BASE_DIR / "data" / "seed_courses.json"
+
+    with get_connection() as conn:
+        cursor = conn.cursor()
+
+        # 1. Seed removed sections if file exists
+        if seed_removed_path.exists():
+            try:
+                with open(seed_removed_path, "r", encoding="utf-8") as f:
+                    removed_list = json.load(f)
+
+                cursor.executemany("""
+                    INSERT OR IGNORE INTO removed_sections (
+                        uniqueness, term, dept, code, course_code, section, title, credit,
+                        classroom, schedule_raw, instructor, capacity, enrolled, removed_at, reason
+                    ) VALUES (
+                        :uniqueness, :term, :dept, :code, :course_code, :section, :title, :credit,
+                        :classroom, :schedule_raw, :instructor, :capacity, :enrolled, :removed_at, :reason
+                    )
+                """, removed_list)
+                conn.commit()
+                logger.info(f"Seeded {len(removed_list)} removed sections from seed file.")
+            except Exception as e:
+                logger.error(f"Error seeding removed sections: {e}")
+
+        # 2. Seed courses if courses table is empty
+        cursor.execute("SELECT COUNT(*) as cnt FROM courses WHERE term = '2027SP'")
+        course_count = cursor.fetchone()["cnt"]
+        if course_count == 0 and seed_courses_path.exists():
+            try:
+                with open(seed_courses_path, "r", encoding="utf-8") as f:
+                    course_list = json.load(f)
+
+                for c in course_list:
+                    if isinstance(c.get("days"), list):
+                        c["days"] = json.dumps(c["days"])
+
+                cursor.executemany("""
+                    INSERT OR IGNORE INTO courses (
+                        uniqueness, term, dept, code, course_code, section, title, credit,
+                        classroom, schedule_raw, start_date, days, time_range, instructor,
+                        capacity, available, enrolled, seat_status, is_full, location, cid, last_updated_at, first_seen_at, is_new
+                    ) VALUES (
+                        :uniqueness, :term, :dept, :code, :course_code, :section, :title, :credit,
+                        :classroom, :schedule_raw, :start_date, :days, :time_range, :instructor,
+                        :capacity, :available, :enrolled, :seat_status, :is_full, :location, :cid, :last_updated_at, :first_seen_at, :is_new
+                    )
+                """, course_list)
+                conn.commit()
+                logger.info(f"Seeded {len(course_list)} courses from seed file.")
+            except Exception as e:
+                logger.error(f"Error seeding courses: {e}")
 
 def purge_non_undergraduate_courses():
     """Remove any postgraduate (500+), pharmacy, and intensive english courses from database."""

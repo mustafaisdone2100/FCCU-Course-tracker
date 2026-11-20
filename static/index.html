@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>FCCU Course Tracker | Spring 2027 Seat Availability</title>
   <meta name="description" content="Real-time course seat tracker and seat-opening alert system for FCCU Spring 2027 course registration." />
-  <link rel="stylesheet" href="/static/styles.css?v=3" />
+  <link rel="stylesheet" href="/static/styles.css?v=4" />
   <link rel="icon" type="image/png" href="/static/fccu-logo.png" />
 </head>
 <body>
@@ -78,9 +78,12 @@
           ✉️ My Alerts
         </button>
 
-        <!-- Removed Sections Button -->
+        <!-- Removed Sections Button & Direct CSV Download -->
         <button class="btn btn-secondary" onclick="openRemovedSectionsModal()" title="View courses and sections removed or cancelled on Empower">
           🗑️ Removed (<span id="removed-badge">0</span>)
+        </button>
+        <button class="btn btn-secondary" onclick="exportRemovedToCSV()" title="Download CSV exclusively for removed/cancelled sections" style="border-color: rgba(244, 63, 94, 0.45); color: #fda4af; background: rgba(244, 63, 94, 0.1);">
+          📥 Removed CSV
         </button>
 
 
@@ -150,7 +153,10 @@
       <div class="stat-card glass" style="cursor: pointer;" onclick="switchToRemovedFilter()" title="Click to view sections dropped or cancelled on Empower">
         <span class="stat-label">Cancelled / Removed</span>
         <div class="stat-value" id="stat-removed-sections" style="color: #fda4af;">0</div>
-        <div class="stat-sub">Dropped on Empower</div>
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 0.25rem;">
+          <span class="stat-sub">Dropped on Empower</span>
+          <span onclick="event.stopPropagation(); exportRemovedToCSV();" style="font-size: 0.72rem; color: #fda4af; text-decoration: underline; cursor: pointer; font-weight: 600;" title="Download CSV of removed sections">📥 CSV</span>
+        </div>
       </div>
 
       <div class="stat-card glass">
@@ -394,7 +400,7 @@
             class="btn btn-secondary" 
             onclick="exportRemovedToCSV()" 
             title="Download CSV file exclusively for cancelled / removed sections"
-            style="border-color: rgba(244, 63, 94, 0.4); color: #fda4af; font-size: 0.85rem; padding: 0.55rem 0.9rem; display: inline-flex; align-items: center; gap: 0.4rem; white-space: nowrap;"
+            style="border-color: rgba(244, 63, 94, 0.5); color: #fda4af; background: rgba(244, 63, 94, 0.15); font-size: 0.85rem; padding: 0.55rem 0.95rem; display: inline-flex; align-items: center; gap: 0.4rem; white-space: nowrap; font-weight: 600;"
           >
             📥 <span>Download Removed CSV</span>
           </button>
@@ -419,6 +425,6 @@
     </div>
   </footer>
 
-  <script src="/static/app.js?v=3"></script>
+  <script src="/static/app.js?v=4"></script>
 </body>
 </html>
