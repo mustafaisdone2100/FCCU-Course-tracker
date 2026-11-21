@@ -199,7 +199,7 @@ async def dispatch_email_alerts_for_event(alert: Dict[str, Any]):
         notified_ids = []
         for sub in subs:
             to_email = sub["email"]
-            success = await dispatch_email_alert(
+            success, _ = await dispatch_email_alert(
                 to_email=to_email,
                 alert_type=alert_type,
                 course_code=course_code,

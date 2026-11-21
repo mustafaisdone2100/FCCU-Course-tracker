@@ -260,7 +260,7 @@ async def send_direct_test_email(payload: Dict[str, str]):
     section = payload.get("section", "A").strip().upper()
     title = payload.get("title", "Intro to Communication Studies")
 
-    delivered = await dispatch_email_alert(
+    delivered, err_detail = await dispatch_email_alert(
         to_email=email,
         alert_type="SEAT_OPENED",
         course_code=course_code,
@@ -281,7 +281,7 @@ async def send_direct_test_email(payload: Dict[str, str]):
     elif not configured:
         msg = f"ℹ️ Email simulated for {email}. (Note: Real delivery requires SMTP_USER & SMTP_PASSWORD or RESEND_API_KEY in Render environment variables)."
     else:
-        msg = f"⚠️ Attempted to send via {provider}, but encountered a dispatch error. Check server logs."
+        msg = f"⚠️ Attempted to send via {provider}, but encountered an error: {err_detail}"
 
     return {
         "success": delivered,

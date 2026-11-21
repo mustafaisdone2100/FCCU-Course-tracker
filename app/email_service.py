@@ -3,7 +3,7 @@ import logging
 import asyncio
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-from typing import Dict, Any, Optional, List
+from typing import Dict, Any, Optional, List, Tuple
 import httpx
 
 from app.config import (
@@ -125,40 +125,79 @@ def build_alert_html(
     """
     return html
 
-def _send_smtp(to_email: str, subject: str, html_content: str) -> bool:
-    """Send email via SMTP (synchronous helper for asyncio.to_thread)."""
-    try:
-        msg = MIMEMultipart("alternative")
-        msg["Subject"] = subject
-        msg["From"] = f"{SMTP_FROM_NAME} <{SMTP_USER}>"
-        msg["To"] = to_email
+def _send_smtp(to_email: str, subject: str, html_content: str) -> Tuple[bool, str]:
+    """Send email via SMTP with smart dual-port support (587 STARTTLS & 465 SSL)."""
+    user = (SMTP_USER or "").strip()
+    password = (SMTP_PASSWORD or "").replace(" ", "").strip()
+    host = (SMTP_HOST or "smtp.gmail.com").strip()
+    port = int(SMTP_PORT) if SMTP_PORT else 587
 
-        # Attach HTML
-        part = MIMEText(html_content, "html", "utf-8")
-        msg.attach(part)
+    if not user or not password:
+        return False, "SMTP_USER or SMTP_PASSWORD is not configured in environment variables."
 
-        with smtplib.SMTP(SMTP_HOST, SMTP_PORT, timeout=12) as server:
-            server.ehlo()
-            server.starttls()
-            server.ehlo()
-            server.login(SMTP_USER, SMTP_PASSWORD)
-            server.sendmail(SMTP_USER, [to_email], msg.as_string())
+    msg = MIMEMultipart("alternative")
+    msg["Subject"] = subject
+    msg["From"] = f"{SMTP_FROM_NAME} <{user}>"
+    msg["To"] = to_email
 
-        logger.info(f"Successfully sent alert email to {to_email} via SMTP.")
-        return True
-    except Exception as e:
-        logger.error(f"Failed to send email to {to_email} via SMTP: {e}")
-        return False
+    part = MIMEText(html_content, "html", "utf-8")
+    msg.attach(part)
 
-async def _send_resend(to_email: str, subject: str, html_content: str) -> bool:
+    # Determine ports to try: if port 587 fails (e.g. Render network timeout), fallback to 465 SSL
+    ports_to_try = [port]
+    if port == 587 and 465 not in ports_to_try:
+        ports_to_try.append(465)
+    elif port == 465 and 587 not in ports_to_try:
+        ports_to_try.append(587)
+
+    last_error = ""
+    for p in ports_to_try:
+        try:
+            if p == 465:
+                # Direct SSL on port 465
+                with smtplib.SMTP_SSL(host, 465, timeout=12) as server:
+                    server.login(user, password)
+                    server.sendmail(user, [to_email], msg.as_string())
+                logger.info(f"Successfully sent alert email to {to_email} via SMTP_SSL (port 465).")
+                return True, "Delivered via SSL port 465"
+            else:
+                # STARTTLS on port 587
+                with smtplib.SMTP(host, p, timeout=12) as server:
+                    server.ehlo()
+                    server.starttls()
+                    server.ehlo()
+                    server.login(user, password)
+                    server.sendmail(user, [to_email], msg.as_string())
+                logger.info(f"Successfully sent alert email to {to_email} via SMTP STARTTLS (port {p}).")
+                return True, f"Delivered via STARTTLS port {p}"
+
+        except smtplib.SMTPAuthenticationError as auth_err:
+            auth_msg = (
+                f"Google Authentication Failed (Code 535): Username and password not accepted. "
+                "CRITICAL: Google strictly requires a 16-character App Password (not your normal Gmail login password). "
+                "Go to myaccount.google.com/apppasswords to create a 16-letter App Password and add it to Render without spaces."
+            )
+            logger.error(f"Gmail SMTP Auth Error: {auth_err}")
+            return False, auth_msg
+
+        except Exception as e:
+            err_str = str(e)
+            logger.warning(f"SMTP attempt on port {p} failed: {err_str}")
+            last_error = f"Port {p} error: {err_str}"
+
+    return False, f"Could not connect to {host} ({last_error})"
+
+async def _send_resend(to_email: str, subject: str, html_content: str) -> Tuple[bool, str]:
     """Send email via Resend API."""
     try:
+        api_key = (RESEND_API_KEY or "").strip()
+        from_email = (RESEND_FROM_EMAIL or "onboarding@resend.dev").strip()
         headers = {
-            "Authorization": f"Bearer {RESEND_API_KEY}",
+            "Authorization": f"Bearer {api_key}",
             "Content-Type": "application/json"
         }
         payload = {
-            "from": f"{SMTP_FROM_NAME} <{RESEND_FROM_EMAIL}>",
+            "from": f"{SMTP_FROM_NAME} <{from_email}>",
             "to": [to_email],
             "subject": subject,
             "html": html_content
@@ -167,13 +206,15 @@ async def _send_resend(to_email: str, subject: str, html_content: str) -> bool:
             resp = await client.post("https://api.resend.com/emails", json=payload, headers=headers)
             if resp.status_code in [200, 201]:
                 logger.info(f"Successfully sent alert email to {to_email} via Resend.")
-                return True
+                return True, "Delivered via Resend API"
             else:
-                logger.error(f"Resend API error: {resp.status_code} - {resp.text}")
-                return False
+                err_detail = f"Resend API error ({resp.status_code}): {resp.text}"
+                logger.error(err_detail)
+                return False, err_detail
     except Exception as e:
-        logger.error(f"Failed to send email to {to_email} via Resend: {e}")
-        return False
+        err_detail = f"Resend network error: {e}"
+        logger.error(err_detail)
+        return False, err_detail
 
 async def dispatch_email_alert(
     to_email: str,
@@ -186,7 +227,7 @@ async def dispatch_email_alert(
     capacity: int,
     instructor: str = "TBA",
     schedule: str = "",
-) -> bool:
+) -> Tuple[bool, str]:
     """Dispatch an alert email to a subscriber via the best available provider."""
     is_seat_open = (alert_type == "SEAT_OPENED")
     subject = (
@@ -212,11 +253,12 @@ async def dispatch_email_alert(
     elif SMTP_USER and SMTP_PASSWORD:
         return await asyncio.to_thread(_send_smtp, to_email, subject, html_content)
     else:
-        logger.info(
+        info_msg = (
             f"[EMAIL SIMULATION] Would dispatch email to '{to_email}' with subject: '{subject}'. "
             "(To send real emails, set SMTP_USER and SMTP_PASSWORD in environment variables)."
         )
-        return True
+        logger.info(info_msg)
+        return True, "Email simulated (no credentials set)"
 
 async def send_welcome_email(to_email: str, course_code: str, section: str, title: str) -> bool:
     """Sends confirmation email immediately when a student subscribes."""
@@ -242,9 +284,11 @@ async def send_welcome_email(to_email: str, course_code: str, section: str, titl
     """
 
     if RESEND_API_KEY:
-        return await _send_resend(to_email, subject, html)
+        ok, _ = await _send_resend(to_email, subject, html)
+        return ok
     elif SMTP_USER and SMTP_PASSWORD:
-        return await asyncio.to_thread(_send_smtp, to_email, subject, html)
+        ok, _ = await asyncio.to_thread(_send_smtp, to_email, subject, html)
+        return ok
     else:
         logger.info(f"[EMAIL SIMULATION] Welcome email to {to_email} for {course_code} {section}")
         return True
