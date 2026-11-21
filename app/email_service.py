@@ -14,22 +14,25 @@ from app.config import (
     SMTP_FROM_NAME,
     RESEND_API_KEY,
     RESEND_FROM_EMAIL,
+    BREVO_API_KEY,
+    BREVO_SENDER_EMAIL,
     EMPOWER_CATALOG_URL,
 )
 
 logger = logging.getLogger("fccu.email")
 
 def is_email_configured() -> bool:
-    """Returns True if either SMTP or Resend credentials are configured."""
-    has_smtp = bool(SMTP_USER and SMTP_PASSWORD)
-    has_resend = bool(RESEND_API_KEY)
-    return has_smtp or has_resend
+    """Returns True if any valid email provider is configured."""
+    return bool(BREVO_API_KEY or RESEND_API_KEY or (SMTP_USER and SMTP_PASSWORD))
 
 def get_email_provider() -> str:
-    if SMTP_USER and SMTP_PASSWORD:
-        return "gmail_smtp"
+    """Returns the active provider, prioritizing HTTPS API providers on cloud hosts."""
+    if BREVO_API_KEY:
+        return "brevo_api"
     elif RESEND_API_KEY:
         return "resend_api"
+    elif SMTP_USER and SMTP_PASSWORD:
+        return "gmail_smtp"
     return "simulation"
 
 def build_alert_html(
@@ -183,9 +186,48 @@ def _send_smtp(to_email: str, subject: str, html_content: str) -> Tuple[bool, st
         except Exception as e:
             err_str = str(e)
             logger.warning(f"SMTP attempt on port {p} failed: {err_str}")
-            last_error = f"Port {p} error: {err_str}"
+            if "101" in err_str or "unreachable" in err_str.lower() or "timeout" in err_str.lower():
+                last_error = (
+                    f"Port {p} error: {err_str}. NOTE: Render's Free Tier blocks outbound SMTP ports (25, 465, 587) to prevent spam. "
+                    "Use Resend (RESEND_API_KEY) or Brevo (BREVO_API_KEY) which send over standard HTTPS (port 443) and are 100% free."
+                )
+            else:
+                last_error = f"Port {p} error: {err_str}"
 
     return False, f"Could not connect to {host} ({last_error})"
+
+async def _send_brevo(to_email: str, subject: str, html_content: str) -> Tuple[bool, str]:
+    """Send email via Brevo (Sendinblue) HTTP API over HTTPS (port 443)."""
+    try:
+        api_key = (BREVO_API_KEY or "").strip()
+        sender_email = (BREVO_SENDER_EMAIL or SMTP_USER or "").strip()
+        if not sender_email:
+            return False, "BREVO_SENDER_EMAIL or SMTP_USER must be set to your registered Brevo email address."
+
+        headers = {
+            "accept": "application/json",
+            "api-key": api_key,
+            "content-type": "application/json"
+        }
+        payload = {
+            "sender": {"name": SMTP_FROM_NAME, "email": sender_email},
+            "to": [{"email": to_email}],
+            "subject": subject,
+            "htmlContent": html_content
+        }
+        async with httpx.AsyncClient(timeout=10.0) as client:
+            resp = await client.post("https://api.brevo.com/v3/smtp/email", json=payload, headers=headers)
+            if resp.status_code in [200, 201]:
+                logger.info(f"Successfully sent alert email to {to_email} via Brevo API.")
+                return True, "Delivered via Brevo HTTPS API"
+            else:
+                err_detail = f"Brevo API error ({resp.status_code}): {resp.text}"
+                logger.error(err_detail)
+                return False, err_detail
+    except Exception as e:
+        err_detail = f"Brevo network error: {e}"
+        logger.error(err_detail)
+        return False, err_detail
 
 async def _send_resend(to_email: str, subject: str, html_content: str) -> Tuple[bool, str]:
     """Send email via Resend API."""
@@ -248,14 +290,16 @@ async def dispatch_email_alert(
         schedule=schedule,
     )
 
-    if RESEND_API_KEY:
+    if BREVO_API_KEY:
+        return await _send_brevo(to_email, subject, html_content)
+    elif RESEND_API_KEY:
         return await _send_resend(to_email, subject, html_content)
     elif SMTP_USER and SMTP_PASSWORD:
         return await asyncio.to_thread(_send_smtp, to_email, subject, html_content)
     else:
         info_msg = (
             f"[EMAIL SIMULATION] Would dispatch email to '{to_email}' with subject: '{subject}'. "
-            "(To send real emails, set SMTP_USER and SMTP_PASSWORD in environment variables)."
+            "(To send real emails, set RESEND_API_KEY or BREVO_API_KEY in environment variables)."
         )
         logger.info(info_msg)
         return True, "Email simulated (no credentials set)"
@@ -283,7 +327,10 @@ async def send_welcome_email(to_email: str, course_code: str, section: str, titl
     </html>
     """
 
-    if RESEND_API_KEY:
+    if BREVO_API_KEY:
+        ok, _ = await _send_brevo(to_email, subject, html)
+        return ok
+    elif RESEND_API_KEY:
         ok, _ = await _send_resend(to_email, subject, html)
         return ok
     elif SMTP_USER and SMTP_PASSWORD:
