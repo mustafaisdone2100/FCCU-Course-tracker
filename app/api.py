@@ -19,7 +19,7 @@ from app.database import (
     remove_email_subscription,
     get_removed_sections,
 )
-from app.email_service import is_email_configured, get_email_provider, send_welcome_email
+from app.email_service import is_email_configured, get_email_provider, send_welcome_email, dispatch_email_alert
 from app.tracker import tracker_manager
 
 
@@ -247,6 +247,48 @@ def email_status():
     return {
         "configured": is_email_configured(),
         "provider": get_email_provider()
+    }
+
+@router.post("/email/test")
+async def send_direct_test_email(payload: Dict[str, str]):
+    """Send an immediate test seat opening email to verify delivery to an inbox."""
+    email = payload.get("email", "").strip()
+    if not email or "@" not in email or "." not in email:
+        raise HTTPException(status_code=400, detail="Please enter a valid email address.")
+
+    course_code = payload.get("course_code", "MCOM 101").strip().upper()
+    section = payload.get("section", "A").strip().upper()
+    title = payload.get("title", "Intro to Communication Studies")
+
+    delivered = await dispatch_email_alert(
+        to_email=email,
+        alert_type="SEAT_OPENED",
+        course_code=course_code,
+        section=section,
+        title=title,
+        message=f"🎉 [TEST ALERT] Seat Opened! {course_code} (Sec {section}) has 1 seat available now!",
+        available=1,
+        capacity=35,
+        instructor="Dr. Test Professor",
+        schedule="M W F 11:00 - 11:50"
+    )
+
+    configured = is_email_configured()
+    provider = get_email_provider()
+
+    if configured and delivered:
+        msg = f"✅ Test email successfully sent to {email} via {provider}! Please check your Inbox and Spam folder."
+    elif not configured:
+        msg = f"ℹ️ Email simulated for {email}. (Note: Real delivery requires SMTP_USER & SMTP_PASSWORD or RESEND_API_KEY in Render environment variables)."
+    else:
+        msg = f"⚠️ Attempted to send via {provider}, but encountered a dispatch error. Check server logs."
+
+    return {
+        "success": delivered,
+        "configured": configured,
+        "provider": provider,
+        "recipient": email,
+        "message": msg
     }
 
 @router.post("/subscriptions")

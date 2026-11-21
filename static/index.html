@@ -421,6 +421,29 @@
         <div id="manage-subs-list" style="display: flex; flex-direction: column; gap: 0.6rem;">
           <!-- Dynamically populated -->
         </div>
+
+        <!-- Test Email Alert Delivery Box -->
+        <div style="background: rgba(30, 41, 59, 0.45); border: 1px dashed rgba(250, 204, 21, 0.3); border-radius: 10px; padding: 0.85rem; margin-top: 1.25rem;">
+          <div style="font-size: 0.825rem; font-weight: 700; color: #fde047; margin-bottom: 0.25rem; display: flex; align-items: center; gap: 0.35rem;">
+            <span>🧪</span> Test Real Email Alert Delivery
+          </div>
+          <p style="font-size: 0.735rem; color: #94a3b8; margin: 0 0 0.65rem 0;">
+            Send an instant test seat opening alert email (MCOM 101) directly to any address to verify it reaches your inbox or spam folder.
+          </p>
+          <div style="display: flex; gap: 0.5rem;">
+            <input 
+              type="email" 
+              id="test-email-input" 
+              class="input-search" 
+              style="flex: 1; font-size: 0.825rem; border-radius: 6px; padding: 0.45rem 0.65rem;" 
+              placeholder="Enter your email to receive test alert..." 
+            />
+            <button class="btn btn-secondary btn-sm" onclick="sendDirectTestEmail()" style="font-size: 0.775rem; border-color: rgba(250, 204, 21, 0.45); color: #fde047; white-space: nowrap;">
+              Send Test Email
+            </button>
+          </div>
+          <div id="test-email-status" style="font-size: 0.75rem; margin-top: 0.5rem; display: none;"></div>
+        </div>
       </div>
     </div>
   </div>

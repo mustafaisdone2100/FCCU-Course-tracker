@@ -1433,6 +1433,47 @@ async function cancelSubscription(subId) {
   }
 }
 
+async function sendDirectTestEmail() {
+  const emailInput = document.getElementById("test-email-input");
+  const statusEl = document.getElementById("test-email-status");
+  const email = (emailInput ? emailInput.value : "").trim();
+
+  if (!email || !email.includes("@") || !email.includes(".")) {
+    showToast("Please enter a valid email address.", "warning");
+    if (emailInput) emailInput.focus();
+    return;
+  }
+
+  showToast(`📧 Sending test seat alert to ${email}...`, "info");
+  if (statusEl) {
+    statusEl.style.display = "block";
+    statusEl.style.color = "#94a3b8";
+    statusEl.textContent = "Sending test alert email...";
+  }
+
+  try {
+    const res = await fetch("/api/email/test", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, course_code: "MCOM 101", section: "A" })
+    });
+    const data = await res.json();
+    if (statusEl) {
+      statusEl.style.display = "block";
+      statusEl.style.color = data.configured ? "#34d399" : "#fbbf24";
+      statusEl.textContent = data.message;
+    }
+    showToast(data.configured ? "✅ Test email sent! Check your inbox." : "ℹ️ Email simulated (SMTP not yet set in environment).", data.configured ? "success" : "info");
+  } catch (e) {
+    if (statusEl) {
+      statusEl.style.display = "block";
+      statusEl.style.color = "#f87171";
+      statusEl.textContent = "Failed to send test email. Server error.";
+    }
+    showToast("Failed to send test email", "warning");
+  }
+}
+
 // ==========================================
 // Cancelled / Removed Sections Functionality
 // ==========================================
