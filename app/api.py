@@ -221,13 +221,19 @@ def handle_toggle_watchlist(payload: Dict[str, str]):
     }
 
 @router.post("/simulate")
-async def trigger_simulate_alert(payload: Optional[Dict[str, str]] = None):
-    """Simulate a seat opening or new section addition for immediate alert testing."""
+async def trigger_simulate_alert(payload: Optional[Dict[str, Any]] = None):
+    """Simulate a seat opening, filling, or new section addition for immediate alert testing."""
     uniqueness = payload.get("uniqueness") if payload else None
     term = payload.get("term", DEFAULT_TERM) if payload else DEFAULT_TERM
     sim_type = payload.get("type", "seat_opened") if payload else "seat_opened"
+    seats = int(payload.get("seats", 1)) if payload else 1
 
-    alert = await tracker_manager.trigger_simulation(uniqueness=uniqueness, term=term, sim_type=sim_type)
+    alert = await tracker_manager.trigger_simulation(
+        uniqueness=uniqueness,
+        term=term,
+        sim_type=sim_type,
+        seats=seats
+    )
     if not alert:
         raise HTTPException(status_code=404, detail="No course found to simulate on")
     return {

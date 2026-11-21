@@ -10,6 +10,7 @@ from app.database import (
     get_stats,
     simulate_seat_opened as db_simulate_seat_opened,
     simulate_new_section as db_simulate_new_section,
+    simulate_seat_filled as db_simulate_seat_filled,
 )
 
 logger = logging.getLogger("fccu.tracker")
@@ -152,13 +153,21 @@ class CourseTrackerManager:
             self._background_task.cancel()
             self._background_task = None
 
-    async def trigger_simulation(self, uniqueness: Optional[str] = None, term: Optional[str] = None, sim_type: str = "seat_opened") -> Optional[Dict[str, Any]]:
-        """Trigger a simulated alert for user testing (seat_opened or new_section)."""
+    async def trigger_simulation(
+        self,
+        uniqueness: Optional[str] = None,
+        term: Optional[str] = None,
+        sim_type: str = "seat_opened",
+        seats: int = 1
+    ) -> Optional[Dict[str, Any]]:
+        """Trigger a simulated alert for user testing (seat_opened, new_section, or seat_filled)."""
         target_term = term or self.active_term
         if sim_type == "new_section":
             alert_data = await asyncio.to_thread(db_simulate_new_section, target_term)
+        elif sim_type == "seat_filled":
+            alert_data = await asyncio.to_thread(db_simulate_seat_filled, uniqueness, target_term)
         else:
-            alert_data = await asyncio.to_thread(db_simulate_seat_opened, uniqueness, target_term)
+            alert_data = await asyncio.to_thread(db_simulate_seat_opened, uniqueness, target_term, seats)
 
         if alert_data:
             await self.broadcast("seat_alert", alert_data)

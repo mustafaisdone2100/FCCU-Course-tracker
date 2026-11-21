@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>FCCU Course Tracker | Spring 2027 Seat Availability</title>
   <meta name="description" content="Real-time course seat tracker and seat-opening alert system for FCCU Spring 2027 course registration." />
-  <link rel="stylesheet" href="/static/styles.css?v=4" />
+  <link rel="stylesheet" href="/static/styles.css?v=5" />
   <link rel="icon" type="image/png" href="/static/fccu-logo.png" />
 </head>
 <body>
@@ -102,27 +102,80 @@
       <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem;">
         <div style="display: flex; align-items: center; gap: 0.5rem; color: #c7d2fe; font-weight: 600;">
           <span>🎓</span>
-          <span>FCCU Registration &amp; Add/Drop Monitor (Undergraduate 100–400 &amp; MATH 095)</span>
+          <span>FCCU Registration &amp; Add/Drop Live Tracker (Undergraduate 100–400 &amp; MATH 095)</span>
         </div>
         <a href="https://mysis-fccollege.empower-xl.com/fusebox.cfm?fuseaction=CourseCatalog&rpt=1" target="_blank" rel="noopener noreferrer" style="color: #38bdf8; text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 0.25rem;">
           Empower SIS Catalog &rarr;
         </a>
       </div>
       <div style="display: flex; gap: 0.6rem; flex-wrap: wrap; font-size: 0.775rem;">
-        <span style="background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.3); color: #34d399; padding: 0.25rem 0.6rem; border-radius: 6px; font-weight: 600;">
-          ● Phase 1: Pre-Registration (Active Scraper)
+        <span style="background: rgba(99, 102, 241, 0.18); border: 1px solid rgba(99, 102, 241, 0.4); color: #c7d2fe; padding: 0.3rem 0.75rem; border-radius: 8px; font-weight: 600; display: inline-flex; align-items: center; gap: 0.4rem;">
+          📅 <span>Registration: 23rd November to 18th December</span>
         </span>
-        <span style="background: rgba(99, 102, 241, 0.15); border: 1px solid rgba(99, 102, 241, 0.3); color: #a5b4fc; padding: 0.25rem 0.6rem; border-radius: 6px; font-weight: 600;">
-          📅 Phase 2: Registration Opens 23rd Nov
-        </span>
-        <span style="background: rgba(245, 158, 11, 0.15); border: 1px solid rgba(245, 158, 11, 0.3); color: #fde68a; padding: 0.25rem 0.6rem; border-radius: 6px; font-weight: 600;">
-          🔄 Phase 3: Add/Drop Period (January 2027)
+        <span style="background: rgba(245, 158, 11, 0.15); border: 1px solid rgba(245, 158, 11, 0.35); color: #fde68a; padding: 0.3rem 0.75rem; border-radius: 8px; font-weight: 600; display: inline-flex; align-items: center; gap: 0.4rem;">
+          🔄 <span>Add/Drop Period: 11th January to 29th January</span>
         </span>
       </div>
       <div style="color: var(--text-dim); font-size: 0.75rem;">
-        The system continuously scans Empower. If departments add brand new sections or remove/cancel sections before or during registration / add-drop, the catalog updates automatically and alerts you instantly!
+        Empower SIS Live Monitor &bull; If a student drops a course (1–2 seats open up) or departments add new sections, they will immediately appear on the live radar below until filled!
       </div>
     </div>
+
+    <!-- Live Top Radar Section: New Sections Added (Left) & Seats Just Appeared / 1-2 Seats Left (Right) -->
+    <section id="top-live-radar-container">
+      <div class="top-radar-grid">
+
+        <!-- LEFT PANEL: New Sections Added -->
+        <div class="radar-panel glass" id="new-sections-panel">
+          <div class="radar-panel-header">
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+              <span style="font-size: 1.25rem;">🆕</span>
+              <div>
+                <h3 style="font-size: 0.98rem; font-weight: 700; color: #67e8f9; margin: 0; display: flex; align-items: center; gap: 0.45rem;">
+                  New Sections Added
+                  <span id="top-new-sections-badge" class="badge-pill-cyan">0</span>
+                </h3>
+                <p style="font-size: 0.72rem; color: #94a3b8; margin: 0;">Recently opened by departments on Empower</p>
+              </div>
+            </div>
+            <button class="btn btn-secondary btn-sm" onclick="filterToStatus('new')" style="font-size: 0.7rem; padding: 0.25rem 0.55rem; color: #67e8f9; border-color: rgba(6, 182, 212, 0.35);" title="Filter entire catalog to new sections">
+              View All &rarr;
+            </button>
+          </div>
+
+          <div id="top-new-sections-list" class="radar-list-scroll">
+            <!-- Dynamically populated by JS -->
+          </div>
+        </div>
+
+        <!-- RIGHT PANEL: Seats Just Appeared (1-2 Seats Left) -->
+        <div class="radar-panel glass" id="seats-appeared-panel">
+          <div class="radar-panel-header">
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+              <span style="font-size: 1.25rem;">⚡</span>
+              <div>
+                <h3 style="font-size: 0.98rem; font-weight: 700; color: #fde047; margin: 0; display: flex; align-items: center; gap: 0.45rem;">
+                  Seats Appeared!
+                  <span id="top-seats-appeared-badge" class="badge-pill-amber">0</span>
+                  <span class="live-pulse-dot" title="Live radar actively monitoring seat drops"></span>
+                </h3>
+                <p style="font-size: 0.72rem; color: #94a3b8; margin: 0;">1–2 seats open now (drops / opened seats). Stays until filled!</p>
+              </div>
+            </div>
+            <div style="display: flex; gap: 0.35rem; align-items: center;">
+              <button class="btn btn-secondary btn-sm" onclick="triggerTestSeatDrop(1)" title="Simulate a student dropping a course (e.g. MCOM 101, ARTS 101, BUSN 101) with 1 seat" style="font-size: 0.7rem; padding: 0.25rem 0.55rem; border-color: rgba(245, 158, 11, 0.45); color: #fde047;">
+                🧪 Test Drop
+              </button>
+            </div>
+          </div>
+
+          <div id="top-seats-appeared-list" class="radar-list-scroll">
+            <!-- Dynamically populated by JS -->
+          </div>
+        </div>
+
+      </div>
+    </section>
 
     <!-- Stats Dashboard Row -->
     <div class="stats-grid">
@@ -425,6 +478,6 @@
     </div>
   </footer>
 
-  <script src="/static/app.js?v=4"></script>
+  <script src="/static/app.js?v=5"></script>
 </body>
 </html>

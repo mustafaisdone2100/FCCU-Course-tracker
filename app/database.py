@@ -711,11 +711,11 @@ def toggle_watchlist(uniqueness: str, term: str) -> bool:
                 conn.commit()
             return True
 
-def simulate_seat_opened(uniqueness: Optional[str] = None, term: str = "2027SP") -> Optional[Dict[str, Any]]:
+def simulate_seat_opened(uniqueness: Optional[str] = None, term: str = "2027SP", seats: int = 1) -> Optional[Dict[str, Any]]:
     """
     Simulation feature:
-    Forces a course to transition from 0 seats to 1 seat, or creates a demo alert,
-    allowing the user to verify audio chime, desktop notification, and UI banner immediately!
+    Forces a course to transition to 1 or 2 seats available (seat drop alert),
+    allowing immediate verification of the 'Seats Appeared!' radar, audio chime, and banners!
     """
     with get_connection() as conn:
         cursor = conn.cursor()
@@ -724,9 +724,18 @@ def simulate_seat_opened(uniqueness: Optional[str] = None, term: str = "2027SP")
             cursor.execute("SELECT * FROM courses WHERE uniqueness = ?", (uniqueness,))
             course = cursor.fetchone()
         else:
-            # Pick a sample course (e.g. ARTS 101 or CSCS or BUSN)
-            cursor.execute("SELECT * FROM courses WHERE term = ? ORDER BY course_code ASC LIMIT 1", (term,))
+            # Pick a popular student undergraduate course (e.g. MCOM 101, ARTS 101, BUSN 101, CSCS 100)
+            cursor.execute("""
+                SELECT * FROM courses 
+                WHERE term = ? 
+                  AND course_code IN ('MCOM 101', 'ARTS 101', 'BUSN 101', 'CSCS 100', 'CSCS 101', 'SOCL 100', 'ENGL 101')
+                  AND available != ?
+                ORDER BY RANDOM() LIMIT 1
+            """, (term, seats))
             course = cursor.fetchone()
+            if not course:
+                cursor.execute("SELECT * FROM courses WHERE term = ? AND available != ? ORDER BY RANDOM() LIMIT 1", (term, seats))
+                course = cursor.fetchone()
 
         if not course:
             return None
@@ -734,10 +743,11 @@ def simulate_seat_opened(uniqueness: Optional[str] = None, term: str = "2027SP")
         c = dict(course)
         now_iso = datetime.now(timezone.utc).isoformat()
         old_avail = 0
-        new_avail = 1
+        new_avail = max(1, min(seats, 5))
         cap = c["capacity"] if c["capacity"] > 0 else 35
 
-        msg = f"🎉 [DEMO ALERT] Seat Opened! {c['course_code']} (Sec {c['section']}) has 1 seat available now (was 0/{cap})."
+        seat_label = "1 seat" if new_avail == 1 else f"{new_avail} seats"
+        msg = f"🎉 [SEAT DROP] Seat Appeared! {c['course_code']} (Sec {c['section']}) has {seat_label} available now!"
 
         cursor.execute("""
             INSERT INTO alerts (uniqueness, course_code, section, title, term, alert_type, message, old_available, new_available, capacity, created_at)
@@ -749,7 +759,7 @@ def simulate_seat_opened(uniqueness: Optional[str] = None, term: str = "2027SP")
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """, (c["uniqueness"], c["course_code"], c["section"], c["title"], term, old_avail, new_avail, cap, "SEAT_OPENED", now_iso))
 
-        # Also temporarily update course to 1 seat available so UI reflects it
+        # Update course to 1 or 2 seats available so UI immediately reflects it
         cursor.execute("""
             UPDATE courses 
             SET available = ?, enrolled = ?, seat_status = 'low', is_full = 0, last_updated_at = ?
@@ -768,6 +778,61 @@ def simulate_seat_opened(uniqueness: Optional[str] = None, term: str = "2027SP")
             "message": msg,
             "old_available": old_avail,
             "new_available": new_avail,
+            "capacity": cap,
+            "created_at": now_iso
+        }
+
+def simulate_seat_filled(uniqueness: Optional[str] = None, term: str = "2027SP") -> Optional[Dict[str, Any]]:
+    """Simulate a student registering and filling an open seat (transitions available to 0)."""
+    with get_connection() as conn:
+        cursor = conn.cursor()
+
+        if uniqueness:
+            cursor.execute("SELECT * FROM courses WHERE uniqueness = ?", (uniqueness,))
+            course = cursor.fetchone()
+        else:
+            cursor.execute("SELECT * FROM courses WHERE term = ? AND available > 0 AND available <= 2 LIMIT 1", (term,))
+            course = cursor.fetchone()
+
+        if not course:
+            return None
+
+        c = dict(course)
+        now_iso = datetime.now(timezone.utc).isoformat()
+        old_avail = c["available"]
+        new_avail = 0
+        cap = c["capacity"] if c["capacity"] > 0 else 35
+
+        msg = f"🔴 [STATUS UPDATE] Seat Filled! {c['course_code']} (Sec {c['section']}) is now FULL (0/{cap} seats)."
+
+        cursor.execute("""
+            INSERT INTO alerts (uniqueness, course_code, section, title, term, alert_type, message, old_available, new_available, capacity, created_at)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """, (c["uniqueness"], c["course_code"], c["section"], c["title"], term, "COURSE_FULL", msg, old_avail, new_avail, cap, now_iso))
+
+        cursor.execute("""
+            INSERT INTO seat_history (uniqueness, course_code, section, title, term, old_available, new_available, capacity, change_type, created_at)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """, (c["uniqueness"], c["course_code"], c["section"], c["title"], term, old_avail, new_avail, cap, "COURSE_FULL", now_iso))
+
+        cursor.execute("""
+            UPDATE courses 
+            SET available = 0, enrolled = capacity, seat_status = 'full', is_full = 1, last_updated_at = ?
+            WHERE uniqueness = ?
+        """, (now_iso, c["uniqueness"]))
+
+        conn.commit()
+
+        return {
+            "uniqueness": c["uniqueness"],
+            "course_code": c["course_code"],
+            "section": c["section"],
+            "title": c["title"],
+            "term": term,
+            "alert_type": "COURSE_FULL",
+            "message": msg,
+            "old_available": old_avail,
+            "new_available": 0,
             "capacity": cap,
             "created_at": now_iso
         }

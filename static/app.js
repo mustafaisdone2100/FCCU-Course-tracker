@@ -169,10 +169,13 @@ function handleIncomingSeatAlert(alertData) {
       match.is_full = alertData.new_available <= 0;
       match.seat_status = alertData.new_available <= 0 ? "full" : (alertData.new_available <= 3 ? "low" : "open");
       renderCourses();
+    } else {
+      loadCourses(false);
     }
   }
 
-  // Refresh stats
+  // Refresh top radar and stats
+  renderTopRadarFeed();
   loadStats();
 }
 
@@ -215,8 +218,50 @@ function filterToCourse(code) {
   state.searchQuery = code;
   const searchInput = document.getElementById("search-input");
   if (searchInput) searchInput.value = code;
+  state.selectedStatus = "all";
+  document.querySelectorAll(".chip[data-status]").forEach(c => c.classList.toggle("active", c.dataset.status === "all"));
   renderCourses();
   dismissBanner();
+
+  const el = document.getElementById("courses-container");
+  if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function filterToStatus(status) {
+  document.querySelectorAll(".chip[data-status]").forEach(c => c.classList.remove("active"));
+  const chip = document.querySelector(`.chip[data-status='${status}']`);
+  if (chip) chip.classList.add("active");
+  state.selectedStatus = status;
+  renderCourses();
+
+  const el = document.getElementById("courses-container");
+  if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function copyCourseCode(text) {
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(() => {
+      showToast(`📋 Copied "${text}" for Empower SIS!`, "success");
+    }).catch(() => {
+      fallbackCopy(text);
+    });
+  } else {
+    fallbackCopy(text);
+  }
+}
+
+function fallbackCopy(text) {
+  const ta = document.createElement("textarea");
+  ta.value = text;
+  document.body.appendChild(ta);
+  ta.select();
+  try {
+    document.execCommand("copy");
+    showToast(`📋 Copied "${text}" for Empower SIS!`, "success");
+  } catch (e) {
+    showToast(`Code: ${text}`, "info");
+  }
+  document.body.removeChild(ta);
 }
 
 function handleSyncCompleted(syncData) {
@@ -304,6 +349,7 @@ async function loadCourses(showSpinner = true) {
     const data = await res.json();
     state.courses = data.courses || [];
     renderCourses();
+    renderTopRadarFeed();
   } catch (e) {
     console.error("Failed to load courses:", e);
     showToast("Failed to fetch course data from server.", "warning");
@@ -373,12 +419,197 @@ async function triggerTestAlert(type = "seat_opened") {
       body: JSON.stringify({ term: state.activeTerm, type }),
     });
     const data = await res.json();
-    if (data.success) {
+    if (data.success && data.alert) {
+      handleIncomingSeatAlert(data.alert);
       showToast(isSection ? "New section alert triggered! Check banner & sound." : "Seat alert triggered! Check banner & sound.", "success");
       await Promise.all([loadCourses(false), loadStats()]);
     }
   } catch (e) {
     showToast("Failed to trigger test alert", "warning");
+  }
+}
+
+async function triggerTestSeatDrop(seats = 1) {
+  showToast(`🧪 Simulating student drop (${seats} seat${seats > 1 ? "s" : ""} appeared)...`, "info");
+  try {
+    const res = await fetch("/api/simulate", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ term: state.activeTerm, type: "seat_opened", seats: seats })
+    });
+    const data = await res.json();
+    if (data.success && data.alert) {
+      handleIncomingSeatAlert(data.alert);
+      showToast(`🎉 ${data.alert.course_code} (Sec ${data.alert.section}) now has ${data.alert.new_available} seat! Appeared on top radar!`, "success");
+      await Promise.all([loadCourses(false), loadStats()]);
+    }
+  } catch (e) {
+    showToast("Failed to simulate seat drop", "warning");
+  }
+}
+
+async function triggerTestSeatFill(uniqueness) {
+  showToast("Simulating seat filled / registered...", "info");
+  try {
+    const res = await fetch("/api/simulate", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ term: state.activeTerm, type: "seat_filled", uniqueness: uniqueness })
+    });
+    const data = await res.json();
+    if (data.success && data.alert) {
+      handleIncomingSeatAlert(data.alert);
+      showToast(`🔴 Seat filled! Removed from appeared list.`, "info");
+      await Promise.all([loadCourses(false), loadStats()]);
+    }
+  } catch (e) {
+    showToast("Failed to simulate seat fill", "warning");
+  }
+}
+
+// Top Live Radar Rendering: New Sections (Left) & Seats Just Appeared 1-2 Seats (Right)
+function renderTopRadarFeed() {
+  const newSecList = document.getElementById("top-new-sections-list");
+  const newBadge = document.getElementById("top-new-sections-badge");
+  const appearedList = document.getElementById("top-seats-appeared-list");
+  const appearedBadge = document.getElementById("top-seats-appeared-badge");
+
+  if (!newSecList || !appearedList) return;
+
+  // 1. LEFT PANEL: New Sections Added
+  const newSections = state.courses.filter(c => c.is_new === 1 || c.is_new === true);
+  if (newBadge) newBadge.textContent = newSections.length;
+
+  if (newSections.length === 0) {
+    newSecList.innerHTML = `
+      <div class="radar-empty-state">
+        <div style="font-size: 1.5rem; margin-bottom: 0.25rem;">🆕</div>
+        <div style="color: #67e8f9; font-weight: 600; font-size: 0.85rem;">No New Sections Added Yet</div>
+        <div style="color: #94a3b8; font-size: 0.72rem; margin-top: 0.2rem;">
+          When departments open new sections during registration or Add/Drop, they will automatically appear here!
+        </div>
+      </div>
+    `;
+  } else {
+    // Show top 8 new sections in scrollable panel
+    const displayNew = newSections.slice(0, 8);
+    newSecList.innerHTML = displayNew.map(c => `
+      <div class="radar-item-card radar-item-new" id="top-new-${c.uniqueness}">
+        <div class="radar-item-header">
+          <div style="display: flex; align-items: center; gap: 0.4rem;">
+            <strong style="color: #67e8f9; font-size: 0.9rem;">${c.course_code}</strong>
+            <span class="section-badge" style="background: rgba(6, 182, 212, 0.2); color: #67e8f9; padding: 1px 6px; font-size: 0.7rem;">Sec ${c.section}</span>
+            <span class="badge-new-pill">🆕 NEW</span>
+          </div>
+          <span style="font-size: 0.72rem; color: #34d399; font-weight: 600;">
+            🟢 ${c.available}/${c.capacity} Available
+          </span>
+        </div>
+        <div class="radar-item-title">${c.title}</div>
+        <div class="radar-item-meta">
+          <span>👤 ${c.instructor || "TBA"}</span>
+          <span>📍 ${c.classroom || "TBA"}</span>
+          <span>📅 ${c.schedule_raw || "TBA"}</span>
+        </div>
+        <div class="radar-item-actions">
+          <button class="btn btn-secondary btn-xs" onclick="copyCourseCode('${c.course_code} ${c.section}')" title="Copy course code for Empower SIS">
+            📋 Copy Code
+          </button>
+          <div style="display: flex; gap: 0.35rem;">
+            <button class="btn btn-notify-sm" onclick="openNotifyModal('${c.course_code}', '${c.section}', '${c.uniqueness}', '${(c.title || '').replace(/'/g, "\\'")}')" style="font-size: 0.68rem; padding: 0.2rem 0.5rem;">
+              🔔 Alert
+            </button>
+            <button class="btn btn-secondary btn-xs" onclick="filterToCourse('${c.course_code}')">
+              View &rarr;
+            </button>
+          </div>
+        </div>
+      </div>
+    `).join("");
+
+    if (newSections.length > 8) {
+      newSecList.innerHTML += `
+        <div style="text-align: center; padding: 0.35rem 0;">
+          <button class="btn btn-secondary btn-xs" onclick="filterToStatus('new')" style="color: #67e8f9; border-color: rgba(6, 182, 212, 0.4);">
+            View all ${newSections.length} new sections &rarr;
+          </button>
+        </div>
+      `;
+    }
+  }
+
+  // 2. RIGHT PANEL: Seats Appeared! (1-2 Seats Left)
+  // Filters courses with 1 or 2 seats available (drops / opened seats). Stays until filled!
+  const appearedCourses = state.courses
+    .filter(c => c.available > 0 && c.available <= 2)
+    .sort((a, b) => a.available - b.available || a.course_code.localeCompare(b.course_code));
+
+  if (appearedBadge) appearedBadge.textContent = appearedCourses.length;
+
+  if (appearedCourses.length === 0) {
+    appearedList.innerHTML = `
+      <div class="radar-empty-state">
+        <div style="font-size: 1.6rem; margin-bottom: 0.25rem;">🎯</div>
+        <div style="color: #fde047; font-weight: 700; font-size: 0.875rem;">Live Seat Drop Radar Active</div>
+        <div style="color: #94a3b8; font-size: 0.72rem; margin: 0.25rem 0 0.65rem 0; max-width: 380px;">
+          Empower is being monitored 24/7. When a student drops a course (e.g. Mass Comm, Arts, Business) and 1–2 seats appear, it will instantly show up here until filled!
+        </div>
+        <div style="display: flex; gap: 0.4rem; justify-content: center; flex-wrap: wrap;">
+          <button class="btn btn-secondary btn-sm" onclick="triggerTestSeatDrop(1)" style="border-color: rgba(245, 158, 11, 0.45); color: #fde047; font-size: 0.72rem;">
+            🧪 Test Drop (1 Seat)
+          </button>
+          <button class="btn btn-secondary btn-sm" onclick="triggerTestSeatDrop(2)" style="border-color: rgba(245, 158, 11, 0.45); color: #fde047; font-size: 0.72rem;">
+            🧪 Test Drop (2 Seats)
+          </button>
+        </div>
+      </div>
+    `;
+  } else {
+    appearedList.innerHTML = appearedCourses.map(c => {
+      const isOne = c.available === 1;
+      const urgencyBadge = isOne
+        ? `<span class="badge-urgent-pulse">🔥 ONLY 1 SEAT LEFT!</span>`
+        : `<span class="badge-urgent-pulse-amber">⚡ ONLY 2 SEATS LEFT!</span>`;
+
+      return `
+        <div class="radar-item-card radar-item-appeared" id="top-appeared-${c.uniqueness}">
+          <div class="radar-item-header">
+            <div style="display: flex; align-items: center; gap: 0.4rem;">
+              <strong style="color: #fff; font-size: 0.95rem;">${c.course_code}</strong>
+              <span class="section-badge" style="background: rgba(245, 158, 11, 0.2); color: #fde047; padding: 1px 6px; font-size: 0.7rem;">Sec ${c.section}</span>
+              ${urgencyBadge}
+            </div>
+            <span style="font-size: 0.75rem; color: #fde047; font-weight: 700; background: rgba(245, 158, 11, 0.15); padding: 2px 7px; border-radius: 6px;">
+              ${c.available} / ${c.capacity} Available
+            </span>
+          </div>
+          <div class="radar-item-title">${c.title}</div>
+          <div class="radar-item-meta">
+            <span>👤 ${c.instructor || "TBA"}</span>
+            <span>📍 ${c.classroom || "TBA"}</span>
+            <span>📅 ${c.schedule_raw || "TBA"}</span>
+          </div>
+          <div class="radar-item-actions">
+            <div style="display: flex; gap: 0.35rem; align-items: center;">
+              <button class="btn btn-secondary btn-xs" onclick="copyCourseCode('${c.course_code} ${c.section}')" title="Copy code for Empower SIS registration" style="border-color: rgba(245, 158, 11, 0.35); color: #fde047;">
+                📋 Copy Code
+              </button>
+              <button class="btn btn-secondary btn-xs" onclick="triggerTestSeatFill('${c.uniqueness}')" title="Simulate a student taking this seat (fills the seat)" style="color: #94a3b8; font-size: 0.65rem;">
+                ✕ Mark Filled
+              </button>
+            </div>
+            <div style="display: flex; gap: 0.35rem;">
+              <button class="btn btn-notify-sm" onclick="openNotifyModal('${c.course_code}', '${c.section}', '${c.uniqueness}', '${(c.title || '').replace(/'/g, "\\'")}')" style="font-size: 0.68rem; padding: 0.2rem 0.5rem;">
+                🔔 Alert
+              </button>
+              <button class="btn btn-secondary btn-xs" onclick="filterToCourse('${c.course_code}')">
+                View &rarr;
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join("");
   }
 }
 
@@ -452,6 +683,8 @@ function updateAlertBadge() {
 function renderCourses() {
   const container = document.getElementById("courses-container");
   if (!container) return;
+
+  renderTopRadarFeed();
 
   // Sync toolbar CSV button label & state
   const csvBtn = document.getElementById("export-csv-btn");
