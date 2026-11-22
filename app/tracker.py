@@ -125,8 +125,10 @@ class CourseTrackerManager:
     async def _polling_loop(self):
         """Continuous background worker that polls Empower."""
         logger.info(f"Starting background course tracker loop (interval: {self.poll_interval}s)...")
-        # Run initial sync on startup
-        await self.sync_term(self.active_term)
+        # Allow server to boot and serve pre-seeded courses immediately without delay
+        await asyncio.sleep(4)
+        if self.is_running:
+            await self.sync_term(self.active_term)
 
         while self.is_running:
             try:

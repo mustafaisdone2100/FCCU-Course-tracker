@@ -476,8 +476,24 @@ function renderTopRadarFeed() {
 
   if (!newSecList || !appearedList) return;
 
-  // 1. LEFT PANEL: New Sections Added
-  const newSections = state.courses.filter(c => c.is_new === 1 || c.is_new === true);
+  // 1. LEFT PANEL: New Sections Added (Active for max 3 days, ordered by most recent)
+  const THREE_DAYS_MS = 3 * 24 * 60 * 60 * 1000;
+  const now = Date.now();
+  const newSections = state.courses
+    .filter(c => {
+      if (!c.is_new) return false;
+      if (c.first_seen_at) {
+        const age = now - new Date(c.first_seen_at).getTime();
+        if (age > THREE_DAYS_MS) return false; // Expire after 3 days
+      }
+      return true;
+    })
+    .sort((a, b) => {
+      const timeA = new Date(a.first_seen_at || a.last_updated_at || 0).getTime();
+      const timeB = new Date(b.first_seen_at || b.last_updated_at || 0).getTime();
+      return timeB - timeA; // Most recent first
+    });
+
   if (newBadge) newBadge.textContent = newSections.length;
 
   if (newSections.length === 0) {
@@ -493,13 +509,24 @@ function renderTopRadarFeed() {
   } else {
     // Show top 8 new sections in scrollable panel
     const displayNew = newSections.slice(0, 8);
-    newSecList.innerHTML = displayNew.map(c => `
+    newSecList.innerHTML = displayNew.map(c => {
+      let timeBadge = "";
+      if (c.first_seen_at || c.last_updated_at) {
+        const diffMs = Math.max(0, now - new Date(c.first_seen_at || c.last_updated_at).getTime());
+        const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+        if (diffHours < 1) timeBadge = `<span style="font-size: 0.65rem; color: #a5f3fc; background: rgba(6, 182, 212, 0.2); border: 1px solid rgba(6, 182, 212, 0.35); padding: 1px 6px; border-radius: 4px;">Just now</span>`;
+        else if (diffHours < 24) timeBadge = `<span style="font-size: 0.65rem; color: #a5f3fc; background: rgba(6, 182, 212, 0.2); border: 1px solid rgba(6, 182, 212, 0.35); padding: 1px 6px; border-radius: 4px;">${diffHours}h ago</span>`;
+        else timeBadge = `<span style="font-size: 0.65rem; color: #a5f3fc; background: rgba(6, 182, 212, 0.2); border: 1px solid rgba(6, 182, 212, 0.35); padding: 1px 6px; border-radius: 4px;">${Math.floor(diffHours / 24)}d ago</span>`;
+      }
+
+      return `
       <div class="radar-item-card radar-item-new" id="top-new-${c.uniqueness}">
         <div class="radar-item-header">
-          <div style="display: flex; align-items: center; gap: 0.4rem;">
+          <div style="display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap;">
             <strong style="color: #67e8f9; font-size: 0.9rem;">${c.course_code}</strong>
             <span class="section-badge" style="background: rgba(6, 182, 212, 0.2); color: #67e8f9; padding: 1px 6px; font-size: 0.7rem;">Sec ${c.section}</span>
             <span class="badge-new-pill">🆕 NEW</span>
+            ${timeBadge}
           </div>
           <span style="font-size: 0.72rem; color: #34d399; font-weight: 600;">
             🟢 ${c.available}/${c.capacity} Available
@@ -525,7 +552,8 @@ function renderTopRadarFeed() {
           </div>
         </div>
       </div>
-    `).join("");
+      `;
+    }).join("");
 
     if (newSections.length > 8) {
       newSecList.innerHTML += `
@@ -1493,12 +1521,17 @@ async function sendDirectTestEmail() {
     statusEl.textContent = "Sending test alert email...";
   }
 
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 12000);
+
   try {
     const res = await fetch("/api/email/test", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, course_code: "MCOM 101", section: "A" })
+      body: JSON.stringify({ email, course_code: "MCOM 101", section: "A" }),
+      signal: controller.signal
     });
+    clearTimeout(timer);
     const data = await res.json();
     updateEmailProviderBadge();
     if (statusEl) {
@@ -1508,12 +1541,16 @@ async function sendDirectTestEmail() {
     }
     showToast(data.configured ? "✅ Test email sent! Check your inbox." : "ℹ️ Email simulated (SMTP not yet set in environment).", data.configured ? "success" : "info");
   } catch (e) {
+    clearTimeout(timer);
+    const isTimeout = (e.name === "AbortError");
     if (statusEl) {
       statusEl.style.display = "block";
       statusEl.style.color = "#f87171";
-      statusEl.textContent = "Failed to send test email. Server error.";
+      statusEl.textContent = isTimeout 
+        ? "⚠️ Request timed out. Outbound SMTP is blocked on Render Free Tier. Please use Resend API!" 
+        : "Failed to send test email. Server error.";
     }
-    showToast("Failed to send test email", "warning");
+    showToast(isTimeout ? "Test email request timed out" : "Failed to send test email", "warning");
   }
 }
 

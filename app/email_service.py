@@ -16,6 +16,7 @@ from app.config import (
     RESEND_FROM_EMAIL,
     BREVO_API_KEY,
     BREVO_SENDER_EMAIL,
+    IS_RENDER,
     EMPOWER_CATALOG_URL,
 )
 

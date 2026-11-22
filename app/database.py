@@ -420,8 +420,8 @@ def save_courses_and_detect_changes(
                 INSERT INTO courses (
                     uniqueness, term, dept, code, course_code, section, title, credit,
                     classroom, schedule_raw, start_date, days, time_range, instructor,
-                    capacity, available, enrolled, seat_status, is_full, location, cid, last_updated_at, is_new
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    capacity, available, enrolled, seat_status, is_full, location, cid, last_updated_at, first_seen_at, is_new
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 ON CONFLICT(uniqueness) DO UPDATE SET
                     term=excluded.term,
                     dept=excluded.dept,
@@ -444,14 +444,19 @@ def save_courses_and_detect_changes(
                     location=excluded.location,
                     cid=excluded.cid,
                     last_updated_at=excluded.last_updated_at,
-                    is_new=CASE WHEN excluded.is_new = 1 THEN 1 ELSE courses.is_new END
+                    first_seen_at=COALESCE(courses.first_seen_at, excluded.first_seen_at),
+                    is_new=CASE 
+                        WHEN excluded.is_new = 1 THEN 1 
+                        WHEN courses.first_seen_at IS NOT NULL AND datetime(courses.first_seen_at) < datetime('now', '-3 days') THEN 0
+                        ELSE courses.is_new 
+                    END
             """, (
                 c["uniqueness"], c["term"], c["dept"], c["code"], c["course_code"],
                 c["section"], c["title"], c.get("credit", ""), c.get("classroom", ""),
                 c.get("schedule_raw", ""), c.get("start_date", ""), days_json,
                 c.get("time_range", ""), c.get("instructor", "TBA"), c["capacity"],
                 c["available"], c["enrolled"], c["seat_status"], 1 if c["is_full"] else 0,
-                c.get("location", ""), c.get("cid", ""), now_iso, 1 if is_new_section else 0
+                c.get("location", ""), c.get("cid", ""), now_iso, now_iso if is_new_section else None, 1 if is_new_section else 0
             ))
 
         # Remove sections that are no longer listed on Empower (keep only currently active Empower courses)
@@ -496,6 +501,21 @@ def save_courses_and_detect_changes(
 
     return seat_changes, new_alerts
 
+def cleanup_expired_new_sections(cursor):
+    """Expire is_new flag for courses older than 3 days."""
+    try:
+        cursor.execute("""
+            UPDATE courses 
+            SET is_new = 0 
+            WHERE is_new = 1 
+              AND (
+                  (first_seen_at IS NOT NULL AND datetime(first_seen_at) < datetime('now', '-3 days'))
+                  OR (first_seen_at IS NULL AND last_updated_at IS NOT NULL AND datetime(last_updated_at) < datetime('now', '-3 days'))
+              )
+        """)
+    except Exception as e:
+        logger.warning(f"Failed to cleanup expired new sections: {e}")
+
 def get_courses(
     term: str,
     search: Optional[str] = None,
@@ -508,6 +528,8 @@ def get_courses(
     """Query courses with optional filtering and watchlist status."""
     with get_connection() as conn:
         cursor = conn.cursor()
+        cleanup_expired_new_sections(cursor)
+        conn.commit()
 
         query = """
             SELECT c.*, 
@@ -591,6 +613,8 @@ def get_stats(term: str) -> Dict[str, Any]:
     """Compute aggregate stats for the term dashboard."""
     with get_connection() as conn:
         cursor = conn.cursor()
+        cleanup_expired_new_sections(cursor)
+        conn.commit()
 
         cursor.execute("""
             SELECT 
@@ -870,17 +894,18 @@ def simulate_new_section(term: str = "2027SP") -> Optional[Dict[str, Any]]:
             INSERT INTO courses (
                 uniqueness, term, dept, code, course_code, section, title, credit,
                 classroom, schedule_raw, start_date, days, time_range, instructor,
-                capacity, available, enrolled, seat_status, is_full, location, cid, last_updated_at, is_new
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1)
+                capacity, available, enrolled, seat_status, is_full, location, cid, last_updated_at, first_seen_at, is_new
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1)
             ON CONFLICT(uniqueness) DO UPDATE SET
-                available=excluded.available, capacity=excluded.capacity, is_new=1, last_updated_at=excluded.last_updated_at
+                available=excluded.available, capacity=excluded.capacity, is_new=1, 
+                first_seen_at=excluded.first_seen_at, last_updated_at=excluded.last_updated_at
         """, (
             new_uniq, term, b["dept"], b["code"], b["course_code"], new_sec_letter,
             new_title, b.get("credit", "3.00"), b.get("classroom", "TBA"),
             b.get("schedule_raw", "M W F 14:00 - 14:50"), b.get("start_date", "02/01/2027"),
             b.get("days", "[\"M\", \"W\", \"F\"]"), b.get("time_range", "14:00 - 14:50"),
             b.get("instructor", "Faculty Member"), cap, avail, 0, "open", 0,
-            b.get("location", ""), b.get("cid", ""), now_iso
+            b.get("location", ""), b.get("cid", ""), now_iso, now_iso
         ))
 
         msg = f"🆕 [DEMO ALERT] New Section Added! {b['course_code']} (Sec {new_sec_letter} - {new_title}) added with {avail}/{cap} seats!"

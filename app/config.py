@@ -73,6 +73,17 @@ BREVO_SENDER_EMAIL = (
 ).strip().strip("'\"") or SMTP_USER
 IS_RENDER = bool(os.environ.get("RENDER"))
 
+# Auto-detect if user entered Resend API key into SMTP_PASSWORD field
+if not RESEND_API_KEY and SMTP_PASSWORD.startswith("re_"):
+    RESEND_API_KEY = SMTP_PASSWORD
+    SMTP_PASSWORD = ""
+
+# Auto-detect if user entered Brevo API key into SMTP_PASSWORD field
+if not BREVO_API_KEY and SMTP_PASSWORD.startswith("xkeysib-"):
+    BREVO_API_KEY = SMTP_PASSWORD
+    SMTP_PASSWORD = ""
+
+
 
 
 

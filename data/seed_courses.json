@@ -8577,7 +8577,7 @@
     "cid": "75F30197E9257E5994FC7F36E7FA31B8",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_ISLM_100B_B",
@@ -8603,7 +8603,7 @@
     "cid": "7ED437CB8A7D3A8D752B69F07DD7FC0F",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_ISLM_100B_C",
@@ -8629,7 +8629,7 @@
     "cid": "5B07A8C05179C95C8D9F63DDC4127B29",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_ISLM_100B_D",
@@ -8655,7 +8655,7 @@
     "cid": "7D1CDD102F2205C0EA00CCFBF4ABE289",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_ISLM_100B_E",
@@ -8681,7 +8681,7 @@
     "cid": "671A1AF168DD404FA6DBF7D722209EFE",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_ISLM_100B_F",
@@ -8707,7 +8707,7 @@
     "cid": "CDF9758AAE278AD41141687F587EC720",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_ISLM_100B_G",
@@ -8733,7 +8733,7 @@
     "cid": "B0C7C6691F4FADA27357A37E72CA168A",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_ISLM_100B_H",
@@ -8759,7 +8759,7 @@
     "cid": "2FA0DBDBD37EE8E64E0DB912BB8D8F5B",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_ISLM_100B_I",
@@ -8785,7 +8785,7 @@
     "cid": "4FEA586FA001E0B5162BFDB9BCAC052F",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_ISLM_100B_J",
@@ -8811,7 +8811,7 @@
     "cid": "DC5254312DB5A331F986B5A08AEC9513",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_ISLM_100B_K",
@@ -8837,7 +8837,7 @@
     "cid": "1A772C649BFD1BF300F3620181A13E85",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_ISLM_100B_L",
@@ -8863,7 +8863,7 @@
     "cid": "449479267BA84D0EBCC0CBF34DE203E5",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_ISLM_100B_M",
@@ -8889,7 +8889,7 @@
     "cid": "1689278F6E1A2F9E26055319A3FB0AEA",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_ISLM_100B_N",
@@ -8915,7 +8915,7 @@
     "cid": "82547C14C9A9DA951383D5B765DF4E23",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_ISLM_100B_O",
@@ -8941,7 +8941,7 @@
     "cid": "68DB0500F43B95455F9A0B024BE85526",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_ISLM_100B_P",
@@ -8967,7 +8967,7 @@
     "cid": "28934E4A8C0D8DB789726B06B081E4DE",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_ISLM_100B_Q",
@@ -8993,7 +8993,7 @@
     "cid": "9F2354713B4AE71B15EE0B0181999871",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_ISLM_100B_R",
@@ -9019,7 +9019,7 @@
     "cid": "7EB7BC81E893D0FF4C4476D18452143C",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_ISLM_100B_S",
@@ -9045,7 +9045,7 @@
     "cid": "2BA8B8637B1A840B152E140267C3173A",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_ISLM_100B_T",
@@ -9071,7 +9071,7 @@
     "cid": "BACF82FA71255ADEC10A7EDFE045F041",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_ISLM_100B_U",
@@ -9097,7 +9097,7 @@
     "cid": "166FF499D23C4A57597726015714C675",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_ISLM_307_A",
@@ -9123,7 +9123,7 @@
     "cid": "C140EBA9EEA030E7F685CA47D7B17E3B",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_ISLM_308_A",
@@ -9149,7 +9149,7 @@
     "cid": "F6AC6674AF723E79A8ACD9D9DD1A85F7",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_BIOL_403_A",
@@ -9175,7 +9175,7 @@
     "cid": "85CEED1A4D72BD0067B3483605C3DA5D",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_BIOL_412_A",
@@ -9201,7 +9201,7 @@
     "cid": "485DEC2B6F99266FF16572DDDCC286D6",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_BIOL_473_A",
@@ -9227,7 +9227,7 @@
     "cid": "E711963254046AD8FC45024B85F1F6E5",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_BIOT_314_A",
@@ -9253,7 +9253,7 @@
     "cid": "549FAC292633633F6D5F043890DAC545",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_BIOT_409_A",
@@ -9279,7 +9279,7 @@
     "cid": "CCEA6EF38581607FEAB52502CBD9B694",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_BIOT_412_A",
@@ -9305,7 +9305,7 @@
     "cid": "34F9EEA7D12B9FBAC77D49A590F3E12A",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_COMP_113_A",
@@ -9331,7 +9331,7 @@
     "cid": "9E17F0F999B2FDF63A686F7A5AF1B9E1",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_COMP_113_B",
@@ -9357,7 +9357,7 @@
     "cid": "C6454502F01935DD2EEF5401917B1AD1",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_COMP_113_C",
@@ -9383,7 +9383,7 @@
     "cid": "3B327EBB83E81244AEF43D20B6AA640D",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_COMP_213_A",
@@ -9409,7 +9409,7 @@
     "cid": "0771A9536F8E37C3A10C9710551B1AE4",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_COMP_213_B",
@@ -9435,7 +9435,7 @@
     "cid": "8B3B5BE8CF83EE1F604C4B1EA99E5BDA",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_COMP_213_C",
@@ -9461,7 +9461,7 @@
     "cid": "B648014ED39B1AF49275D964BC8222EB",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_COMP_220_A",
@@ -9487,7 +9487,7 @@
     "cid": "46CE5E4BC65029E759BA73DB25203AC3",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_COMP_220_B",
@@ -9513,7 +9513,7 @@
     "cid": "7C531E861900F2F5CD6F850B74F42FCF",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_COMP_300_C",
@@ -9539,7 +9539,7 @@
     "cid": "F7CE8C6B5095AE4D36D1621BDB64C1B7",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_COMP_302_A",
@@ -9565,7 +9565,7 @@
     "cid": "ADB4C5F8A4D854B9FA584D7A2DDAA542",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_COMP_302_B",
@@ -9591,7 +9591,7 @@
     "cid": "1BF632C3F8E2247F3F50DDFCB721F0F2",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_COMP_303_A",
@@ -9617,7 +9617,7 @@
     "cid": "F1D68448C0EA0BA5C7FCCB71853F166B",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_COMP_303_B",
@@ -9643,7 +9643,7 @@
     "cid": "1FF201BE4074F1817ADC516425F1CE5F",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_COMP_303_C",
@@ -9669,7 +9669,7 @@
     "cid": "5636D56D9C750839335E161F3BE64ED9",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_COMP_311_A",
@@ -9695,7 +9695,7 @@
     "cid": "83283ECEB92996DB67AF35336EEAD0FD",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_COMP_311_B",
@@ -9721,7 +9721,7 @@
     "cid": "C143E0F4E9A0E2E517FFBBA4C1EA7747",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_COMP_311_C",
@@ -9747,7 +9747,7 @@
     "cid": "D7A99B1094E7318FA022EED437D5677F",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_COMP_360_A",
@@ -9773,7 +9773,7 @@
     "cid": "7BDF8EEB91AD84DF20DDF87C35407758",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_COMP_360_B",
@@ -9799,7 +9799,7 @@
     "cid": "3E370A05BE7EBDCD31DC0675A572A67C",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_COMP_401_A",
@@ -9825,7 +9825,7 @@
     "cid": "A9FEA6F471FBA692A0C0DF51F3711773",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_COMP_401_B",
@@ -9851,7 +9851,7 @@
     "cid": "9DD84224633BEE5822AB668A142E4720",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_COMP_410_B",
@@ -9877,7 +9877,7 @@
     "cid": "474672C5508DB8F4415080957BCA08D3",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_COMP_421_A",
@@ -9903,7 +9903,7 @@
     "cid": "7A2AB64E247C10C0F0ADD622725D6FC3",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_COMP_421_B",
@@ -9929,7 +9929,7 @@
     "cid": "08F018AF1924668896C302F2E19B7B4E",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_COMP_421_C",
@@ -9955,7 +9955,7 @@
     "cid": "2A4EB938B788E0BFD0F20EF230E23FF3",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_COMP_497A_A",
@@ -9981,7 +9981,7 @@
     "cid": "E647BC356CF556FE980148F07B0FA935",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_COMP_497B_A",
@@ -10007,7 +10007,7 @@
     "cid": "E20A0482EF0363AF8D907F5B86102D9F",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_CSCS_100_A",
@@ -10033,7 +10033,7 @@
     "cid": "5638464FFC730A5EB1CC0781B1F509D4",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_CSCS_100_B",
@@ -10059,7 +10059,7 @@
     "cid": "EE3D29BB90A6CDB2E38B88FBA5C6C605",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_CSCS_100_C",
@@ -10085,7 +10085,7 @@
     "cid": "8BFE88516DF78C0B5166617FD434B904",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_CSCS_100_D",
@@ -10111,7 +10111,7 @@
     "cid": "6771A0E7E5B8CCFF752211150C51AAB7",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_CSCS_100_E",
@@ -10137,7 +10137,7 @@
     "cid": "644EE2B71ABBA2CD4401E6BCFDFAC16F",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_CSCS_100_F",
@@ -10163,7 +10163,7 @@
     "cid": "3A855C9FFCDC6763F9F926F57B20CAE3",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_CSCS_100_G",
@@ -10189,7 +10189,7 @@
     "cid": "407C987575109D5CBD5CAB2E1050C98C",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_CSCS_100_H",
@@ -10215,7 +10215,7 @@
     "cid": "91715E707442812003A38E2B84A5BDB1",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_CSCS_100_I",
@@ -10241,7 +10241,7 @@
     "cid": "0CCB28B8C69D2014ED899D8A5DAACEE8",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_CSCS_100_J",
@@ -10267,7 +10267,7 @@
     "cid": "657E475271132BE4E23F3E97A11221C8",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_CSCS_101_A",
@@ -10293,7 +10293,7 @@
     "cid": "811713F8D673FDD46D1EC770039126A4",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_CSCS_101_B",
@@ -10319,7 +10319,7 @@
     "cid": "E6495758BBCA4AA0213E441433B2CD0A",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_CSCS_202_A",
@@ -10345,7 +10345,7 @@
     "cid": "C0A5D306B0E1746BAED047ABA9643B43",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_CSCS_202_B",
@@ -10371,7 +10371,7 @@
     "cid": "12417C589EAE32201A84B8D13C3FE94C",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_CSCS_202_C",
@@ -10397,7 +10397,7 @@
     "cid": "4AA73BCA615466D752AC320659778D58",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_CSCS_203_A",
@@ -10423,7 +10423,7 @@
     "cid": "35DBBEEF19FC075DFF162EDE0C13047C",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_CSCS_203_B",
@@ -10449,7 +10449,7 @@
     "cid": "AB7D90FBD79F3D80FD270120F0F0DF6E",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_CSCS_203_C",
@@ -10475,7 +10475,7 @@
     "cid": "EE8CD8661A88BAB08BAF8BB64438AB73",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_CSCS_291_A",
@@ -10501,7 +10501,7 @@
     "cid": "3DC8A5D3815A835A7F0911A2CA5E515B",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_CSCS_313_A",
@@ -10527,7 +10527,7 @@
     "cid": "AC74A18BC7F8178BB0ECCD9DF6230707",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_CSCS_320_A",
@@ -10553,7 +10553,7 @@
     "cid": "5DF0A7CCE21338D671CDB67AB1F43849",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_CSCS_320_B",
@@ -10579,7 +10579,7 @@
     "cid": "FA2A2379C254A8D03DEFB960A8C711CE",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_CSCS_320_C",
@@ -10605,7 +10605,7 @@
     "cid": "5588C5D600CC9B9E5FE68EB4CA5C9C1B",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_CSCS_321_A",
@@ -10631,7 +10631,7 @@
     "cid": "C94C2627A30ABBB5FD4AB2F7F942D9C7",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_CSCS_342_A",
@@ -10657,7 +10657,7 @@
     "cid": "C1B8CF6B2184C1528FB23DB41A51EFCA",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_CSCS_363_A",
@@ -10683,7 +10683,7 @@
     "cid": "6B3E5DDE638E8A692B87C2ABB7D07EF2",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_CSCS_363_B",
@@ -10709,7 +10709,7 @@
     "cid": "759C52F4C18EF07EE301E68D22624462",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_CSCS_366_A",
@@ -10735,7 +10735,7 @@
     "cid": "291AD11893D6C9F42578D72D1DF0F199",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_CSCS_367_A",
@@ -10761,7 +10761,7 @@
     "cid": "10F56057A58E25D810AF40FB715FACD8",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_CSCS_406_A",
@@ -10787,7 +10787,7 @@
     "cid": "5FAC21A9B517506A6D5E0EF9360B7841",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_CSCS_455_A",
@@ -10813,7 +10813,7 @@
     "cid": "868F59288647C987006F08BCEAFF8615",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_CSCS_456_A",
@@ -10839,7 +10839,7 @@
     "cid": "0E1DFE88C2E13C3294B683873CB4DCB5",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_CSCS_457_A",
@@ -10865,7 +10865,7 @@
     "cid": "ABFB4822B3F72B29EB2F2AFE7B7D2364",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_CSCS_470_A",
@@ -10891,7 +10891,7 @@
     "cid": "D2B891823C49A06B7FD4BDFA6E26C220",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_CSCS_475_A",
@@ -10917,7 +10917,7 @@
     "cid": "5D90799E5B393A5F6F1080217842FF6B",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_CHEM_499A_A",
@@ -10943,7 +10943,7 @@
     "cid": "254D604E720131777A6E2DAB07604685",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_CHEM_499B_A",
@@ -10969,7 +10969,7 @@
     "cid": "F9E070DF3E2D34DBF5A0BDCF0636A779",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_CSCS_403_A",
@@ -10995,7 +10995,7 @@
     "cid": "D46EA1628E0EBF911087E75D69DCCBE8",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_ENVR_210_A",
@@ -11021,7 +11021,7 @@
     "cid": "55C2CC002A29538ADBFBC8451CD40D86",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_MATH_101_A",
@@ -11047,7 +11047,7 @@
     "cid": "8B2E20C479C9C9490692E2074AA90118",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_MATH_101_B",
@@ -11073,7 +11073,7 @@
     "cid": "7EAF1590ED3D88FC1D6E6C065D8FEED0",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_MATH_102_A",
@@ -11099,7 +11099,7 @@
     "cid": "DBB22DAC65DC099C3A40A9FB83619690",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_MATH_102_B",
@@ -11125,7 +11125,7 @@
     "cid": "219F53EA5DD06533F0A7629B35A3EF0F",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_MATH_102_C",
@@ -11151,7 +11151,7 @@
     "cid": "30440889751FB8B65F7D8C4ACE03145A",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_MATH_103_A",
@@ -11177,7 +11177,7 @@
     "cid": "D66AE31D5B500F75C35E95955A045CEF",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_MATH_103_B",
@@ -11203,7 +11203,7 @@
     "cid": "6E9DC7CE732EEC1A37F79D5F4D7D6A19",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_MATH_108_A",
@@ -11229,7 +11229,7 @@
     "cid": "DB8E2B8F925D598101DC0EB58E3E45F4",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_MATH_108_B",
@@ -11255,7 +11255,7 @@
     "cid": "67C3DE6094EC2208FF175CA223369BC6",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_MATH_108_C",
@@ -11281,7 +11281,7 @@
     "cid": "BDA631C09114E20371BE5CB0D66B21D5",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_MATH_108_D",
@@ -11307,7 +11307,7 @@
     "cid": "540834682436788DD85A87E8B33DE422",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_MATH_108_E",
@@ -11333,7 +11333,7 @@
     "cid": "9725943389B8669A6C0F699E0F4F14D3",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_MATH_109_A",
@@ -11359,7 +11359,7 @@
     "cid": "E8F79A7D88308ED0E5B593A3CFFACF93",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_MATH_109_B",
@@ -11385,7 +11385,7 @@
     "cid": "ABED964B2864E14098A4C1D8F3B9E608",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_MATH_109_C",
@@ -11411,7 +11411,7 @@
     "cid": "263FFB8F4FAE99F59833C454D46FF2A1",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_MATH_111_A",
@@ -11437,7 +11437,7 @@
     "cid": "A893B6BFBAA47161D5CCADF0C1B4694E",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_MATH_111_B",
@@ -11463,7 +11463,7 @@
     "cid": "41F06A79D569056469730F2A45F85FED",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_MATH_111_C",
@@ -11489,7 +11489,7 @@
     "cid": "91DE9F15CE8D95DB7E54C4D76A090FE0",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_MATH_111_D",
@@ -11515,7 +11515,7 @@
     "cid": "E124B6D9B7C5716DB5ECF946EAB7C392",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_MATH_202_A",
@@ -11541,7 +11541,7 @@
     "cid": "9968A2A4DBD495F3995E5DF5AD112A7D",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_MATH_204_A",
@@ -11567,7 +11567,7 @@
     "cid": "AF56094FFAB5DD2596E52EBE28616CE9",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_MATH_301_A",
@@ -11593,7 +11593,7 @@
     "cid": "D450D3582B80958C99207D3957FED1F1",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_MATH_302_A",
@@ -11619,7 +11619,7 @@
     "cid": "85C9DBA1F87E88E69382383BF67B3559",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_MATH_303_A",
@@ -11645,7 +11645,7 @@
     "cid": "C53F9AA32BDC33F0689F2AF22B3D89EB",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_MATH_304_A",
@@ -11671,7 +11671,7 @@
     "cid": "116F9DE5B95F11376A13683694FE734F",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_MATH_307_A",
@@ -11697,7 +11697,7 @@
     "cid": "CA6F790AD12D69BD86A9C9784DF3B7E7",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_MATH_310_A",
@@ -11723,7 +11723,7 @@
     "cid": "7E400F0410D056250E75B87CC4CEF5EC",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_MATH_313_A",
@@ -11749,7 +11749,7 @@
     "cid": "46C51F00ACA7B24E538EE76B66EDA4E6",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_MATH_316_A",
@@ -11775,7 +11775,7 @@
     "cid": "A7BF0D18B63AC9DB0F755CACF88B8717",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_MATH_403_A",
@@ -11801,7 +11801,7 @@
     "cid": "D1937D332B60297E4ED3884ED798CF3D",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_MATH_411_A",
@@ -11827,7 +11827,7 @@
     "cid": "58A434C86C1EBB5A3957EE638DE7F262",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_PHYS_234_A",
@@ -11853,7 +11853,7 @@
     "cid": "4F50B9548747AA55898B92CA91B6FC79",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_PHYS_301_A",
@@ -11879,7 +11879,7 @@
     "cid": "C09D79602436105C76BC1615612E9D93",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_PHYS_341_A",
@@ -11905,7 +11905,7 @@
     "cid": "BBA44E1330AFD1FE1332C565088BC22A",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_PHYS_353_A",
@@ -11931,7 +11931,7 @@
     "cid": "923554C3648EA239099D312B021A049B",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_PHYS_462_A",
@@ -11957,7 +11957,7 @@
     "cid": "A95065516944BA534DE5E307D1C99E33",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_PHYS_483_A",
@@ -11983,7 +11983,7 @@
     "cid": "D2172F7F822A1220325EAC4A12DFCEF4",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_PHYS_499A_A",
@@ -12009,7 +12009,7 @@
     "cid": "6C49CDA6D15264ABA6A8F17252394F04",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_PHYS_499B_A",
@@ -12035,7 +12035,7 @@
     "cid": "926ED9BE867A461D71D39B458E15DB0B",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_PLSC_101_A",
@@ -12061,7 +12061,7 @@
     "cid": "1F74B870C280EC11ACF201304D7FA5A6",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_PLSC_101_B",
@@ -12087,7 +12087,7 @@
     "cid": "B4AA2C12EE9EF47E550891AAA44EC428",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_PLSC_101_C",
@@ -12113,7 +12113,7 @@
     "cid": "C084928D1835E6640E43DCAAFBD4B07B",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_PLSC_101_D",
@@ -12139,7 +12139,7 @@
     "cid": "1F2ACEFA09F3C27FC81BF1FF2C62704B",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_PLSC_101_E",
@@ -12165,7 +12165,7 @@
     "cid": "331F4FDA235BB672B8BCA1323B2B821C",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_PLSC_101_F",
@@ -12191,7 +12191,7 @@
     "cid": "AC069F8A8BF33F3354BABBE90B862975",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_PLSC_101_G",
@@ -12217,7 +12217,7 @@
     "cid": "97F0D7887FBA74AFEF095DB2411C9499",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_PLSC_101_H",
@@ -12243,7 +12243,7 @@
     "cid": "8DC51379C10B2DE7116787223FFF542C",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_PSYC_380_A",
@@ -12269,7 +12269,7 @@
     "cid": "8FEB2EB676BB5C5E0715D552874B09E6",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_STAT_313_A",
@@ -12295,7 +12295,7 @@
     "cid": "B1979D31895A68EA10062938D2109C32",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_PLSC_101_I",
@@ -12321,7 +12321,7 @@
     "cid": "74B2B57B91B09EA5B2D2DC427B1F335F",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_PLSC_101_J",
@@ -12347,7 +12347,7 @@
     "cid": "396F12C2ABABB6AD769FE83627D59EBC",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_PLSC_101_K",
@@ -12373,7 +12373,7 @@
     "cid": "5AD23393F311C4CFCC680C64E2967AD6",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_PLSC_102_A",
@@ -12399,7 +12399,7 @@
     "cid": "827FCCE96E4F241131CB8064DC0A661B",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_PLSC_102_B",
@@ -12425,7 +12425,7 @@
     "cid": "00A4ADF8FB66BB830C071933B0241AA5",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_PLSC_102_C",
@@ -12451,7 +12451,7 @@
     "cid": "B371D5F96E7CE29B631136B31001D24D",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_BIOL_100_A",
@@ -12477,7 +12477,7 @@
     "cid": "2B01D5CEC17E767E0A964D3C568E95AF",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_BIOL_100_B",
@@ -12503,7 +12503,7 @@
     "cid": "332EC62898822FC9759E0988715E876E",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_BIOL_100_C",
@@ -12529,7 +12529,7 @@
     "cid": "273639EB8C75CBA3EBF5114B8939377B",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_BIOL_100_D",
@@ -12555,7 +12555,7 @@
     "cid": "CC28CFFFABAA805138BDE45478F1031B",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_BIOL_100_E",
@@ -12581,7 +12581,7 @@
     "cid": "08674B5FF7102FCEECE281797F1F268F",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_BIOL_100_F",
@@ -12607,7 +12607,7 @@
     "cid": "DBD4F542FF4AA7394EDE2F7E3797D6F8",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_BIOL_100_G",
@@ -12633,7 +12633,7 @@
     "cid": "D48655E8B33138BB93A865E34A9A7465",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_BIOL_100_H",
@@ -12659,7 +12659,7 @@
     "cid": "0186281C5F449BA2FEBD555E6439A31B",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_BIOL_100_I",
@@ -12685,7 +12685,7 @@
     "cid": "0078244DEC712E4477D0BCD73A4C7A1C",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_BIOL_102_A",
@@ -12711,7 +12711,7 @@
     "cid": "331E84AA48F80128B95A07F713E4F824",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_BIOL_105_A",
@@ -12737,7 +12737,7 @@
     "cid": "0C78A5E2CA08E10872A8BC525B78BF21",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_BIOL_201_A",
@@ -12763,7 +12763,7 @@
     "cid": "F5D14EFA74DABDEBE2FD960526DBBF41",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_BIOL_201_B",
@@ -12789,7 +12789,7 @@
     "cid": "B50EBFF9AEC3A5BD3E912A11DCF533B0",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_BIOL_203_A",
@@ -12815,7 +12815,7 @@
     "cid": "2ACB7B4CF82B67E65979337EDEA6E8F1",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_BIOL_313_A",
@@ -12841,7 +12841,7 @@
     "cid": "A146850E9BF4EB06BB0D47B96D712D0A",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_BIOL_315_A",
@@ -12867,7 +12867,7 @@
     "cid": "29338060BEFD1A84490C23A2887DE8F4",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_BIOL_331_A",
@@ -12893,7 +12893,7 @@
     "cid": "71690D0A22ADEB48A1C0138E873F837E",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_BIOL_415_A",
@@ -12919,7 +12919,7 @@
     "cid": "67F4860C308FB615726CA04907C8E246",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_BIOL_469_A",
@@ -12945,7 +12945,7 @@
     "cid": "F833EE855449AD8C76811B11A05A835A",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_BIOT_201_A",
@@ -12971,7 +12971,7 @@
     "cid": "5AC7E11F0DC038AFFED8E4E7AAA3CFDB",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_BIOT_202_A",
@@ -12997,7 +12997,7 @@
     "cid": "D0BD8BD3108710607C3F8A826AE5CF5B",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_BIOT_301_A",
@@ -13023,7 +13023,7 @@
     "cid": "E9D415C7AB86562CDB6925CD0D414D7F",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_BIOT_302_A",
@@ -13049,7 +13049,7 @@
     "cid": "203D65801EEB2809465E3040FDDA46C2",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_BIOT_313_A",
@@ -13075,7 +13075,7 @@
     "cid": "183C085124612434C9E7BA5C1CE1C4B6",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_BIOT_408_A",
@@ -13101,7 +13101,7 @@
     "cid": "D7850DFC39C8A95B4436C01C713CA5A8",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_CHEM_100_A",
@@ -13127,7 +13127,7 @@
     "cid": "DFD7A28B6964E57B31BED55D7EA2984E",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_CHEM_100_B",
@@ -13153,7 +13153,7 @@
     "cid": "D3721B481A2D1673197BF5E01D6A244B",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_CHEM_100_C",
@@ -13179,7 +13179,7 @@
     "cid": "6E3207196E189F8242641F4C0B7A148C",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_CHEM_100_D",
@@ -13205,7 +13205,7 @@
     "cid": "34E3A5C70740998A1FE9DF591253D11D",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_CHEM_100_E",
@@ -13231,7 +13231,7 @@
     "cid": "244C3BA916C014529BF44C6767EAE5A2",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_CHEM_100_F",
@@ -13257,7 +13257,7 @@
     "cid": "64D15E94D2DA98D7BA9EC276F4F29CA7",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_CHEM_150_A",
@@ -13283,7 +13283,7 @@
     "cid": "730199D88B8C6DEC4FC340F5C9ED7F64",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_CHEM_150_B",
@@ -13309,7 +13309,7 @@
     "cid": "4BF5250DA446771B2533F84B6129F6A4",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_CHEM_150_C",
@@ -13335,7 +13335,7 @@
     "cid": "BF20C8A78D3F52E37ADE9F988717238C",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_CHEM_160_A",
@@ -13361,7 +13361,7 @@
     "cid": "98BC207A32DD5F80093417012C23789F",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_CHEM_160_B",
@@ -13387,7 +13387,7 @@
     "cid": "1F4337A7A109A7E197511250FCCE49A9",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_CHEM_170_A",
@@ -13413,7 +13413,7 @@
     "cid": "D0D3CB8AE25F2CAB3BCD18DE8A1AFBFE",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_CHEM_250_A",
@@ -13439,7 +13439,7 @@
     "cid": "0AF607C6C29B837AF8B3138B420FEDD1",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_CHEM_261_A",
@@ -13465,7 +13465,7 @@
     "cid": "EFB60FD7E4FE8650DEE4D3F7A4A820D6",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_CHEM_270_A",
@@ -13491,7 +13491,7 @@
     "cid": "1110E1451402C5AEAF56A71CDA14C64D",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_CHEM_311_A",
@@ -13517,7 +13517,7 @@
     "cid": "FBF7540D70D9BB7B0E93410D730A5C16",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_CHEM_320_A",
@@ -13543,7 +13543,7 @@
     "cid": "166A30B05443FC45FDF58FF0BEAB506A",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_CHEM_330_A",
@@ -13569,7 +13569,7 @@
     "cid": "3E798282018EF2F615C7893AFF6157FF",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_CHEM_361_A",
@@ -13595,7 +13595,7 @@
     "cid": "C0F07052F419AAA171BDB3A4438DA9C1",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_CHEM_462_A",
@@ -13621,7 +13621,7 @@
     "cid": "EC30CC80D042D4EC5B5E5DF9199E56E6",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_CHEM_473_A",
@@ -13647,7 +13647,7 @@
     "cid": "C5D88E94CEC123D0A1B1739B132EC4CB",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_COMP_102_A",
@@ -13673,7 +13673,7 @@
     "cid": "32A6B84EA935560A48BF87ECCE1446EE",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_COMP_102_B",
@@ -13699,7 +13699,7 @@
     "cid": "A88FEA51C1B081845A107A1798B363EC",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_COMP_111_A",
@@ -13725,7 +13725,7 @@
     "cid": "20D57E3CC5D6C5290A9F9A3150C84288",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_COMP_111_B",
@@ -13751,7 +13751,7 @@
     "cid": "78B2256ED935CFDABB8A610E34748B13",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_COMP_111_C",
@@ -13777,7 +13777,7 @@
     "cid": "36A8106E564209573849DA71852DC5E4",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_COMP_111_D",
@@ -13803,7 +13803,7 @@
     "cid": "0E7C4E55383AE957752279E732AB8D1E",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_COMP_200_A",
@@ -13829,7 +13829,7 @@
     "cid": "BA3F1858055E33DDE649CC7AAA438883",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_COMP_200_B",
@@ -13855,7 +13855,7 @@
     "cid": "402BE1F1B98AC9AF3F78C7B8C3E6EB38",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_COMP_206_A",
@@ -13881,7 +13881,7 @@
     "cid": "4982903DBB09C92D66840F4DF45AE659",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_COMP_206_B",
@@ -13907,7 +13907,7 @@
     "cid": "D11BE92E6164650E707556234E4D97F6",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_COMP_206_D",
@@ -13933,7 +13933,7 @@
     "cid": "5448339138BE53D604CA76E8DB9F473E",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_COMP_300_A",
@@ -13959,7 +13959,7 @@
     "cid": "AE8A6C0BDE3BF72F17BCFBD3D7027630",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_COMP_300_B",
@@ -13985,7 +13985,7 @@
     "cid": "ED7DEB203833E5F2CD7BE537BF3139E6",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_COMP_301_A",
@@ -14011,7 +14011,7 @@
     "cid": "9B34BF722A7BF9414121272B97529916",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_COMP_301_B",
@@ -14037,7 +14037,7 @@
     "cid": "31BD152427D5057E2AAAD275EC810D9E",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_COMP_360_C",
@@ -14063,7 +14063,7 @@
     "cid": "78347D5EF7F127257381318A45903D74",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_COMP_410_A",
@@ -14089,7 +14089,7 @@
     "cid": "EDB31E1AC84E4EF1D6A42AECB6B785FF",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_COMP_451_A",
@@ -14115,7 +14115,7 @@
     "cid": "F66444C01C25CFC6107BD13CCC71CDDF",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_COMP_451_B",
@@ -14141,7 +14141,7 @@
     "cid": "C434C66DDDC004544FF3910E48373F37",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_CSCS_105_A",
@@ -14167,7 +14167,7 @@
     "cid": "D998D50064E0AD4D1305C980D695D9A6",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_ENVR_101_A",
@@ -14193,7 +14193,7 @@
     "cid": "CF228C2B349C523C9CA83A5FC3671509",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_ENVR_101_B",
@@ -14219,7 +14219,7 @@
     "cid": "C22C2C2E7CDCFB41E7AF1E9791E9314F",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_ENVR_101_C",
@@ -14245,7 +14245,7 @@
     "cid": "4344A327ED35E307188D053C893ECE7A",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_ENVR_323_A",
@@ -14271,7 +14271,7 @@
     "cid": "D07373A3E1AE31E020878FC23E6C1E2F",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_ENVR_416_A",
@@ -14297,7 +14297,7 @@
     "cid": "CA49570A5CD07B7C8FBF47AF12D31CEE",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_HPED_150_A",
@@ -14323,7 +14323,7 @@
     "cid": "11419C2A029321013D1B4E11CB503D3F",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_HPED_150_B",
@@ -14349,7 +14349,7 @@
     "cid": "EFDC83CB383C611AADCB2D46EA858298",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_ISLM_101_G",
@@ -14375,7 +14375,7 @@
     "cid": "FCD4982A0B8942046E44A0FFF52C7B45",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_ISLM_101_H",
@@ -14401,7 +14401,7 @@
     "cid": "877D1D80706013590C6A2B5C31C2FF6A",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_ISLM_101_I",
@@ -14427,7 +14427,7 @@
     "cid": "1E33156CC48B0D3BF70E6B43984AB458",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_ISLM_101_P",
@@ -14453,7 +14453,7 @@
     "cid": "63E85EBBB62BBBF2A71DD0E0003B7261",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_PHYS_100_A",
@@ -14479,7 +14479,7 @@
     "cid": "41A854BE3246C3BDBAEB671264ACB5DA",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_PHYS_100_B",
@@ -14505,7 +14505,7 @@
     "cid": "EC0EF78B0544FF4901EF4DA2F3FEBEF4",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_PHYS_100_C",
@@ -14531,7 +14531,7 @@
     "cid": "49544CF11251422373DE926A14E1DD38",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_PHYS_100_D",
@@ -14557,7 +14557,7 @@
     "cid": "C154333CD48CB82BBD145283DE66817D",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_PHYS_101_A",
@@ -14583,7 +14583,7 @@
     "cid": "59ABE1DF1760AB9A128DCAC5D25C79EF",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_PHYS_101_B",
@@ -14609,7 +14609,7 @@
     "cid": "45E7A5BF606493E4200BF83B9515E22F",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_PHYS_101_C",
@@ -14635,7 +14635,7 @@
     "cid": "B0C7F0DADCAD473FB0F78740AD3AB0F4",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_PHYS_102_A",
@@ -14661,7 +14661,7 @@
     "cid": "328D0C4C8F625BBA9CF300C7A4D7F96A",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_PHYS_102_B",
@@ -14687,7 +14687,7 @@
     "cid": "9373D34E864C0EB37139817C56C37F54",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_PHYS_103_A",
@@ -14713,7 +14713,7 @@
     "cid": "A28A2F2993AA8EF95E949D6D557665D2",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_PHYS_103_B",
@@ -14739,7 +14739,7 @@
     "cid": "72E71A73C1F02BD42F6FCF9304E01AEB",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_PHYS_104_A",
@@ -14765,7 +14765,7 @@
     "cid": "C04A6B4A3570808B78A02D860AF026A6",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_PHYS_321_A",
@@ -14791,7 +14791,7 @@
     "cid": "289FCC7DEA2466E9584F2BC345E1926D",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_PHYS_332_A",
@@ -14817,7 +14817,7 @@
     "cid": "91F7B50634E5CA7C7F8FF32C9FCF7DC4",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_PKST_101_E",
@@ -14843,7 +14843,7 @@
     "cid": "F9122D8A4E48CCCCCE3D8F5D924AF0CD",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_PKST_103_F",
@@ -14869,7 +14869,7 @@
     "cid": "881EFC94ED76EFC2F4099132F85F9195",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_PLSC_202_A",
@@ -14895,7 +14895,7 @@
     "cid": "AB4F91E8E6CD55D7C3E8327F1146ABD0",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_PLSC_203_A",
@@ -14921,7 +14921,7 @@
     "cid": "B22E4DECE8E7144D4824ACB91908DBD8",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_PLSC_203_B",
@@ -14947,7 +14947,7 @@
     "cid": "C9030981A8E8F65A6D1AE3DF395208FA",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_PLSC_212_A",
@@ -14973,7 +14973,7 @@
     "cid": "FA2C6784531FCFADC24F3583CDF76ECB",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_PLSC_301_A",
@@ -14999,7 +14999,7 @@
     "cid": "A4B7B326C4788975D50802103A76084E",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_PLSC_301_B",
@@ -15025,7 +15025,7 @@
     "cid": "B9FD31FC9A476203967FE6D658D66A8F",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_PLSC_302_A",
@@ -15051,7 +15051,7 @@
     "cid": "FCA6B85DFB0470AEF24CB48EF66754B2",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_PLSC_303_A",
@@ -15077,7 +15077,7 @@
     "cid": "753306B45719FA5D020A12EF87B71E73",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_PLSC_304_A",
@@ -15103,7 +15103,7 @@
     "cid": "120FDF8692D10A46946379B9573E7B3C",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_PLSC_310_A",
@@ -15129,7 +15129,7 @@
     "cid": "40FC78E382052DE5F149C0B4AF4B3DFD",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_PLSC_321_A",
@@ -15155,7 +15155,7 @@
     "cid": "6AE97D0807ED0E383EEF0A6D18ED52E0",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_PLSC_323_A",
@@ -15181,7 +15181,7 @@
     "cid": "CF9BFCEB1EAA88A62EC2CC6D0F442AFA",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_PLSC_331_A",
@@ -15207,7 +15207,7 @@
     "cid": "D590819F8D1165A55B3D46F73A80F034",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_PLSC_336_A",
@@ -15233,7 +15233,7 @@
     "cid": "057638B5EBDC4EFB907798A2039F0996",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_PLSC_339_A",
@@ -15259,7 +15259,7 @@
     "cid": "E85CF03E98A4B1A9E65A387008FAFE42",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_PLSC_341_A",
@@ -15285,7 +15285,7 @@
     "cid": "AAACCBA5BBDD095D95AAB325388C20D8",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_PLSC_400_A",
@@ -15311,7 +15311,7 @@
     "cid": "82B39A442F7A62F31535621BC63A01ED",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_PLSC_401_A",
@@ -15337,7 +15337,7 @@
     "cid": "EC76954F3BB78BD5A0979B6B85F5D459",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_PLSC_403_A",
@@ -15363,7 +15363,7 @@
     "cid": "AB97E9A4D1BE3E3F01FF33F5F1BF8C4B",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_PSYC_220_A",
@@ -15389,7 +15389,7 @@
     "cid": "F9D62B608CDB59E8A10CFDB5AFDEEA11",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_PSYC_220_B",
@@ -15415,7 +15415,7 @@
     "cid": "A6991DA8D85FAE76BFDBC0584061F8CA",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_PSYC_335_A",
@@ -15441,7 +15441,7 @@
     "cid": "ADB79DCB702F41F3761D7A1CBFFD91AA",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_PSYC_354_A",
@@ -15467,7 +15467,7 @@
     "cid": "2736197E2F2EFC7222F4ADADDD29F0C6",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_PSYC_354_B",
@@ -15493,7 +15493,7 @@
     "cid": "459922B67352F4BBD16316266344DB46",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_PSYC_360_A",
@@ -15519,7 +15519,7 @@
     "cid": "256C84FD16E4F5331CE0E17F1987EB05",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_PSYC_360_B",
@@ -15545,7 +15545,7 @@
     "cid": "86E18023234D85A3C8A87633E3613F79",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_PSYC_465_A",
@@ -15571,7 +15571,7 @@
     "cid": "5EFCD8AFDE0E619EFCCD2396E6C78581",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_PSYC_465_B",
@@ -15597,7 +15597,7 @@
     "cid": "993365DC2EBF9F86342283C201765C09",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_UNIV_100_A",
@@ -15623,7 +15623,7 @@
     "cid": "5FF04B19972E288E08150E6E4A1A5735",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_UNIV_100_B",
@@ -15649,7 +15649,7 @@
     "cid": "635114D1A35F34D1B6D40A2D03C1DA05",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_UNIV_100_C",
@@ -15675,7 +15675,7 @@
     "cid": "53C0BB11B6F0535D890C53ECC590BEF5",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_UNIV_100_D",
@@ -15701,7 +15701,7 @@
     "cid": "A028A3BB743F3242E715847D6BBA9126",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_UNIV_100_E",
@@ -15727,7 +15727,7 @@
     "cid": "5B6BAD717646F7BC50CBA8B81D3314E5",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_UNIV_100_F",
@@ -15753,7 +15753,7 @@
     "cid": "964703C7BDCEB234C36963FC84D5CB80",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_UNIV_100_G",
@@ -15779,7 +15779,7 @@
     "cid": "89365CB84DD6A67EF8E0B9FAAEE6301D",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_UNIV_100_H",
@@ -15805,7 +15805,7 @@
     "cid": "1BF78AF4606AB33F223335B5710CC1A6",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_UNIV_100_I",
@@ -15831,7 +15831,7 @@
     "cid": "92EB56A34E665C96FB8EEED99AF6A3BE",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_UNIV_100_J",
@@ -15857,7 +15857,7 @@
     "cid": "90BB5AD005B4F107EB802233E45B3CBC",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_UNIV_100_K",
@@ -15883,7 +15883,7 @@
     "cid": "60709E33EE2C4C817688B16812D93AFE",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_UNIV_100_L",
@@ -15909,7 +15909,7 @@
     "cid": "E386EDA6ED78A69061DD8BD1912D052B",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   },
   {
     "uniqueness": "2027SP_UNIV_100_M",
@@ -15935,6 +15935,6 @@
     "cid": "66C0A2D9D6903B41B96440CF8ED40203",
     "last_updated_at": "2026-11-07T22:12:29.245606+00:00",
     "first_seen_at": null,
-    "is_new": 1
+    "is_new": 0
   }
 ]
