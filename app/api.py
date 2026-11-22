@@ -67,7 +67,8 @@ async def query_courses(
     sort_by: str = Query("course_code")
 ):
     """Retrieve filtered list of courses for a term."""
-    courses = get_courses(
+    courses = await asyncio.to_thread(
+        get_courses,
         term=term,
         search=search,
         dept=dept,
@@ -81,7 +82,8 @@ async def query_courses(
     if not courses and not search and not dept and (not status or status == "all") and (not level or level == "ALL") and not watched_only:
         logger.info(f"Database empty on request for {term}. Auto-syncing from Empower...")
         await tracker_manager.sync_term(term)
-        courses = get_courses(
+        courses = await asyncio.to_thread(
+            get_courses,
             term=term,
             search=search,
             dept=dept,
@@ -98,40 +100,40 @@ async def query_courses(
     }
 
 @router.get("/departments")
-def query_departments(term: str = Query(DEFAULT_TERM)):
+async def query_departments(term: str = Query(DEFAULT_TERM)):
     """Retrieve list of departments and course numbers for the term."""
-    depts = get_departments(term=term)
+    depts = await asyncio.to_thread(get_departments, term=term)
     return {
         "term": term,
         "departments": depts
     }
 
 @router.get("/stats")
-def query_stats(term: str = Query(DEFAULT_TERM)):
+async def query_stats(term: str = Query(DEFAULT_TERM)):
     """Get aggregate seat statistics for the term."""
-    stats = get_stats(term=term)
+    stats = await asyncio.to_thread(get_stats, term=term)
     return {
         "term": term,
         "stats": stats
     }
 
 @router.get("/alerts")
-def query_alerts(term: Optional[str] = Query(None), limit: int = Query(50)):
+async def query_alerts(term: Optional[str] = Query(None), limit: int = Query(50)):
     """Get recent seat opened / seat changed alerts."""
-    alerts = get_alerts(term=term, limit=limit)
+    alerts = await asyncio.to_thread(get_alerts, term=term, limit=limit)
     return {
         "alerts": alerts
     }
 
 @router.get("/removed-sections")
-def query_removed_sections(
+async def query_removed_sections(
     term: str = Query(DEFAULT_TERM),
     search: Optional[str] = Query(None),
     dept: Optional[str] = Query(None),
     limit: int = Query(250)
 ):
     """Retrieve sections that were previously listed on Empower SIS but were removed or cancelled."""
-    removed = get_removed_sections(term=term, search=search, dept=dept, limit=limit)
+    removed = await asyncio.to_thread(get_removed_sections, term=term, search=search, dept=dept, limit=limit)
     return {
         "term": term,
         "count": len(removed),

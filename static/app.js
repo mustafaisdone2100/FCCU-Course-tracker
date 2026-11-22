@@ -1231,10 +1231,11 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   updateNotificationBtnUI();
-  setupEventStream();
   await loadTerms();
   await loadAllData();
   startCountdownTimer();
+  // Defer SSE stream until initial page data is rendered so mobile connection pool isn't saturated
+  setTimeout(setupEventStream, 300);
 });
 
 // ==========================================
