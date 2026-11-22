@@ -42,10 +42,26 @@ SMTP_PORT = int(os.environ.get("SMTP_PORT", "587").strip()) if os.environ.get("S
 SMTP_USER = os.environ.get("SMTP_USER", "").strip()
 SMTP_PASSWORD = os.environ.get("SMTP_PASSWORD", "").replace(" ", "").strip()
 SMTP_FROM_NAME = os.environ.get("SMTP_FROM_NAME", "FCCU Course Tracker").strip()
-RESEND_API_KEY = os.environ.get("RESEND_API_KEY", "").strip()
-RESEND_FROM_EMAIL = os.environ.get("RESEND_FROM_EMAIL", "onboarding@resend.dev").strip()
-BREVO_API_KEY = os.environ.get("BREVO_API_KEY", "").strip()
-BREVO_SENDER_EMAIL = os.environ.get("BREVO_SENDER_EMAIL", "").strip() or SMTP_USER
+RESEND_API_KEY = (
+    os.environ.get("RESEND_API_KEY")
+    or os.environ.get("resend_api_key")
+    or os.environ.get("RESEND_KEY")
+    or os.environ.get("RESEND_TOKEN")
+    or os.environ.get("RESEND_API_TOKEN")
+    or ""
+).strip().strip("'\"")
+RESEND_FROM_EMAIL = (os.environ.get("RESEND_FROM_EMAIL") or "onboarding@resend.dev").strip().strip("'\"")
+BREVO_API_KEY = (
+    os.environ.get("BREVO_API_KEY")
+    or os.environ.get("brevo_api_key")
+    or os.environ.get("BREVO_KEY")
+    or os.environ.get("BREVO_TOKEN")
+    or os.environ.get("BREVO_API_TOKEN")
+    or ""
+).strip().strip("'\"")
+BREVO_SENDER_EMAIL = (os.environ.get("BREVO_SENDER_EMAIL") or "").strip().strip("'\"") or SMTP_USER
+IS_RENDER = bool(os.environ.get("RENDER"))
+
 
 
 

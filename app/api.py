@@ -7,7 +7,7 @@ from typing import Optional, Dict, Any
 from fastapi import APIRouter, Query, HTTPException, Request
 from fastapi.responses import Response, StreamingResponse
 
-from app.config import SUPPORTED_TERMS, DEFAULT_TERM
+from app.config import SUPPORTED_TERMS, DEFAULT_TERM, IS_RENDER
 from app.database import (
     get_courses,
     get_stats,
@@ -244,9 +244,18 @@ async def trigger_simulate_alert(payload: Optional[Dict[str, Any]] = None):
 @router.get("/email/status")
 def email_status():
     """Return whether email sending is configured and active provider."""
+    provider = get_email_provider()
+    configured = is_email_configured()
+    is_blocked = (IS_RENDER and provider == "gmail_smtp")
     return {
-        "configured": is_email_configured(),
-        "provider": get_email_provider()
+        "configured": configured,
+        "provider": provider,
+        "is_render": IS_RENDER,
+        "is_smtp_blocked": is_blocked,
+        "hint": (
+            "Render Free Tier blocks Gmail SMTP ports (465/587). Please add RESEND_API_KEY in Render Environment Variables."
+            if is_blocked else ""
+        )
     }
 
 @router.post("/email/test")

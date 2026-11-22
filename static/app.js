@@ -1348,6 +1348,46 @@ async function submitSubscription(e) {
   }
 }
 
+async function updateEmailProviderBadge() {
+  const badge = document.getElementById("test-email-provider-badge");
+  if (!badge) return;
+  try {
+    const res = await fetch("/api/email/status");
+    const data = await res.json();
+    if (data.provider === "resend_api") {
+      badge.textContent = "🟢 Resend API (Ready)";
+      badge.style.color = "#34d399";
+      badge.style.background = "rgba(16, 185, 129, 0.15)";
+      badge.style.border = "1px solid rgba(16, 185, 129, 0.3)";
+      badge.title = "Emails will send over HTTPS port 443 via Resend API.";
+    } else if (data.provider === "brevo_api") {
+      badge.textContent = "🟢 Brevo API (Ready)";
+      badge.style.color = "#34d399";
+      badge.style.background = "rgba(16, 185, 129, 0.15)";
+      badge.style.border = "1px solid rgba(16, 185, 129, 0.3)";
+      badge.title = "Emails will send over HTTPS port 443 via Brevo API.";
+    } else if (data.is_smtp_blocked) {
+      badge.textContent = "🔴 Gmail (Blocked by Render)";
+      badge.style.color = "#f87171";
+      badge.style.background = "rgba(239, 68, 68, 0.15)";
+      badge.style.border = "1px solid rgba(239, 68, 68, 0.3)";
+      badge.title = "Render Free Tier blocks outbound SMTP ports 465/587. Add RESEND_API_KEY in Render!";
+    } else if (data.provider === "gmail_smtp") {
+      badge.textContent = "🟡 Gmail SMTP";
+      badge.style.color = "#fde047";
+      badge.style.background = "rgba(234, 179, 8, 0.15)";
+      badge.style.border = "1px solid rgba(234, 179, 8, 0.3)";
+    } else {
+      badge.textContent = "⚪ Simulation Only";
+      badge.style.color = "#94a3b8";
+      badge.style.background = "rgba(148, 163, 184, 0.15)";
+      badge.style.border = "1px solid rgba(148, 163, 184, 0.3)";
+    }
+  } catch (e) {
+    badge.textContent = "Provider: Unknown";
+  }
+}
+
 function openManageSubscriptionsModal() {
   const modal = document.getElementById("manage-subs-modal");
   const emailInput = document.getElementById("manage-subs-email-input");
@@ -1356,6 +1396,7 @@ function openManageSubscriptionsModal() {
     emailInput.value = savedEmail;
     lookupSubscriptions();
   }
+  updateEmailProviderBadge();
   modal.style.display = "flex";
 }
 
@@ -1458,6 +1499,7 @@ async function sendDirectTestEmail() {
       body: JSON.stringify({ email, course_code: "MCOM 101", section: "A" })
     });
     const data = await res.json();
+    updateEmailProviderBadge();
     if (statusEl) {
       statusEl.style.display = "block";
       statusEl.style.color = data.configured ? "#34d399" : "#fbbf24";
