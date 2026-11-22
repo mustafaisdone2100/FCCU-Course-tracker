@@ -250,7 +250,15 @@ async def _send_resend(to_email: str, subject: str, html_content: str) -> Tuple[
                 logger.info(f"Successfully sent alert email to {to_email} via Resend.")
                 return True, "Delivered via Resend API"
             else:
-                err_detail = f"Resend API error ({resp.status_code}): {resp.text}"
+                err_text = resp.text
+                if "testing emails" in err_text.lower() or "verify a domain" in err_text.lower():
+                    err_detail = (
+                        "Resend test restriction: When using the default onboarding sender, "
+                        "you can only send test emails to the email address you signed up with on Resend. "
+                        "Please enter the email you used on resend.com to test!"
+                    )
+                else:
+                    err_detail = f"Resend API error ({resp.status_code}): {err_text}"
                 logger.error(err_detail)
                 return False, err_detail
     except Exception as e:
