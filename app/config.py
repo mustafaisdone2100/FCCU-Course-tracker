@@ -54,12 +54,23 @@ RESEND_FROM_EMAIL = (os.environ.get("RESEND_FROM_EMAIL") or "onboarding@resend.d
 BREVO_API_KEY = (
     os.environ.get("BREVO_API_KEY")
     or os.environ.get("brevo_api_key")
+    or os.environ.get("BRAVO_API_KEY")
+    or os.environ.get("bravo_api_key")
     or os.environ.get("BREVO_KEY")
+    or os.environ.get("BRAVO_KEY")
     or os.environ.get("BREVO_TOKEN")
+    or os.environ.get("BRAVO_TOKEN")
     or os.environ.get("BREVO_API_TOKEN")
+    or os.environ.get("BRAVO_API_TOKEN")
     or ""
 ).strip().strip("'\"")
-BREVO_SENDER_EMAIL = (os.environ.get("BREVO_SENDER_EMAIL") or "").strip().strip("'\"") or SMTP_USER
+BREVO_SENDER_EMAIL = (
+    os.environ.get("BREVO_SENDER_EMAIL")
+    or os.environ.get("BRAVO_SENDER_EMAIL")
+    or os.environ.get("brevo_sender_email")
+    or os.environ.get("bravo_sender_email")
+    or ""
+).strip().strip("'\"") or SMTP_USER
 IS_RENDER = bool(os.environ.get("RENDER"))
 
 
